@@ -1,8 +1,11 @@
-# Kotlin_Utils
-Kotlin Utilities library.
+# JDA_Utils
+
+JDA (Java Discord API) Utilities library.
 
 ## Download
+
 ### Gradle DSL
+
 ```gradle
 repositories {
     maven { url 'https://repository.aoichaan0513.jp' }
