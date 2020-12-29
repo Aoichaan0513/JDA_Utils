@@ -1,6 +1,5 @@
 package jp.aoichaan0513.YudzukiBot.Utils.Object
 
-import club.minnced.discord.webhook.WebhookClient
 import club.minnced.discord.webhook.WebhookClientBuilder
 import club.minnced.discord.webhook.receive.ReadonlyMessage
 import net.dv8tion.jda.api.entities.Message

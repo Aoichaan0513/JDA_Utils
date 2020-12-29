@@ -10,7 +10,13 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
-abstract class InputAPI(val shardManager: ShardManager, val isStart: Boolean = true, val timeOut: Long = 3, val timeUnit: TimeUnit = TimeUnit.MINUTES, var timeOutAction: Runnable = Runnable { }) : EventListener {
+abstract class InputAPI(
+    val shardManager: ShardManager,
+    val isStart: Boolean = true,
+    val timeOut: Long = 3,
+    val timeUnit: TimeUnit = TimeUnit.MINUTES,
+    var timeOutAction: Runnable = Runnable { }
+) : EventListener {
 
     val scheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     var scheduledFuture: ScheduledFuture<*>? = null

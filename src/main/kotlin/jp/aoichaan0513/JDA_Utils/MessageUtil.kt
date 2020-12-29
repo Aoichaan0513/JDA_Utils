@@ -1,9 +1,7 @@
 package jp.aoichaan0513.YudzukiBot.Utils.Object
 
-import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent
 
 private val MessageChannel.hasPermission
     get() = isGuildTextChannel && hasPermissions(Permission.MESSAGE_MANAGE)

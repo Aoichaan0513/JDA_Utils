@@ -2,7 +2,6 @@ package jp.aoichaan0513.YudzukiBot.Utils.Object
 
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.ClientType
-import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.utils.MarkdownUtil
 import java.util.*
