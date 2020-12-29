@@ -1,4 +1,4 @@
-package jp.aoichaan0513.YudzukiBot.Utils.Object
+package jp.aoichaan0513.JDA_Utils
 
 import club.minnced.discord.webhook.WebhookClientBuilder
 import club.minnced.discord.webhook.receive.ReadonlyMessage

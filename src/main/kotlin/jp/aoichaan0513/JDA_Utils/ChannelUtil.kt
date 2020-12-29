@@ -1,4 +1,4 @@
-package jp.aoichaan0513.YudzukiBot.Utils.Object
+package jp.aoichaan0513.JDA_Utils
 
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
