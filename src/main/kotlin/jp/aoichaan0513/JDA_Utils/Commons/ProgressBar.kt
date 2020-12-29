@@ -1,4 +1,4 @@
-package jp.aoichaan0513.YudzukiBot.API.Commons
+package jp.aoichaan0513.JDA_Utils.Commons
 
 import net.dv8tion.jda.api.utils.MarkdownUtil
 import java.text.DecimalFormat

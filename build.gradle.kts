@@ -7,7 +7,7 @@ plugins {
 
 val groupId = "jp.aoichaan0513"
 group = groupId
-version = "1.0.1"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
