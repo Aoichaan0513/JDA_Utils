@@ -12,20 +12,21 @@ repositories {
 }
 
 dependencies {
-    // compile 'jp.aoichaan0513:JDA_Utils:1.0.0'
-    compile group: 'jp.aoichaan0513', name: 'JDA_Utils', version: '1.0.0'
+    // implementation 'jp.aoichaan0513:JDA_Utils:1.0.0'
+    implementation group: 'jp.aoichaan0513', name: 'JDA_Utils', version: '1.0.0'
 }
 ```
 
 ### Kotlin DSL
+
 ```gradle
 repositories {
     maven("https://repository.aoichaan0513.jp")
 }
 
 dependencies {
-    // api("jp.aoichaan0513:JDA_Utils:1.0.0")
-    api("jp.aoichaan0513", "JDA_Utils", "1.0.0")
+    // implementation("jp.aoichaan0513:JDA_Utils:1.0.0")
+    implementation("jp.aoichaan0513", "JDA_Utils", "1.0.0")
 }
 ```
 
