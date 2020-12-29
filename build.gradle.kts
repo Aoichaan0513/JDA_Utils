@@ -7,7 +7,7 @@ plugins {
 
 val groupId = "jp.aoichaan0513"
 group = groupId
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     mavenCentral()
@@ -20,7 +20,12 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("net.dv8tion", "JDA", "4.2.0_224")
     implementation("club.minnced", "discord-webhooks", "0.5.3")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.5")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.6")
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.withType<KotlinCompile> {
@@ -45,4 +50,11 @@ uploadArchives.repositories.withConvention(MavenRepositoryHandlerConvention::cla
             }
         }
     }
+}
+
+val sourcesJar: Jar by tasks
+val javadocJar: Jar by tasks
+artifacts {
+    archives(sourcesJar)
+    archives(javadocJar)
 }
