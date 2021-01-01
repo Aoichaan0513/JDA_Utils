@@ -29,7 +29,7 @@ class ProgressBar {
             val blankRangeText = " ".repeat((progressCount - count).coerceIn(0, 40))
 
             val progressText = "$percentRangeText$blankRangeText"
-            val percentText = "${decimalFormat.format(percent)}%"
+            val percentText = "${decimalFormat.format(percent.coerceAtLeast(0.0))}%"
 
             return MarkdownUtil.codeblock(
                 progressType.language,

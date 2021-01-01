@@ -7,7 +7,7 @@ plugins {
 
 val groupId = "jp.aoichaan0513"
 group = groupId
-version = "1.0.4"
+version = "1.0.8"
 
 repositories {
     mavenCentral()
@@ -18,9 +18,10 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion", "JDA", "4.2.0_224")
+    implementation("net.dv8tion", "JDA", "4.2.0_225")
     implementation("club.minnced", "discord-webhooks", "0.5.3")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.6")
+    implementation("joda-time", "joda-time", "2.10.8")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.8")
 }
 
 java {
