@@ -13,7 +13,7 @@ class ProgressBar {
         @JvmOverloads
         fun build(
             v1: Double,
-            v2: Double,
+            v2: Double = 100.0,
             progressType: ProgressType = ProgressType.DEFAULT,
             currentStatus: String? = null,
             maxStatus: String? = null,
@@ -26,7 +26,7 @@ class ProgressBar {
             val count = ceil(percent / percentCount).toInt()
 
             val percentRangeText = char.toString().repeat(count.coerceAtLeast(0))
-            val blankRangeText = " ".repeat((progressCount - count).coerceIn(0, 40))
+            val blankRangeText = " ".repeat((progressCount - count).coerceIn(0, progressCount))
 
             val progressText = "$percentRangeText$blankRangeText"
             val percentText = "${decimalFormat.format(percent.coerceAtLeast(0.0))}%"
