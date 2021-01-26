@@ -5,9 +5,8 @@ plugins {
     maven
 }
 
-val groupId = "jp.aoichaan0513"
-group = groupId
-version = "1.0.10"
+group = "jp.aoichaan0513"
+version = "1.0.11"
 
 repositories {
     mavenCentral()
@@ -18,10 +17,10 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion", "JDA", "4.2.0_225")
+    implementation("net.dv8tion", "JDA", "4.2.0_226")
     implementation("club.minnced", "discord-webhooks", "0.5.3")
     implementation("joda-time", "joda-time", "2.10.8")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.8")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.9")
 }
 
 java {
@@ -44,7 +43,7 @@ uploadArchives.repositories.withConvention(MavenRepositoryHandlerConvention::cla
         pom.project {
             withGroovyBuilder {
                 "parent" {
-                    "groupId"(groupId)
+                    "groupId"(group)
                     "artifactId"(rootProject.name)
                     "version"(version)
                 }
