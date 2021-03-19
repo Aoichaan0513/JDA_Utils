@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "jp.aoichaan0513"
-version = "1.0.11"
+version = "1.0.12"
 
 repositories {
     mavenCentral()
@@ -17,8 +17,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion", "JDA", "4.2.0_226")
-    implementation("club.minnced", "discord-webhooks", "0.5.3")
+    implementation("net.dv8tion", "JDA", "4.2.0_242")
+    implementation("club.minnced", "discord-webhooks", "0.5.6")
     implementation("joda-time", "joda-time", "2.10.8")
     implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.9")
 }

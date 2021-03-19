@@ -1,6 +1,6 @@
 # JDA_Utils
 
-JDA (Java Discord API) Utilities library.
+[JDA (Java Discord API)](https://github.com/DV8FromTheWorld/JDA) Utilities library.
 
 ## Download
 
@@ -12,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    // implementation 'jp.aoichaan0513:JDA_Utils:1.0.11'
-    implementation group: 'jp.aoichaan0513', name: 'JDA_Utils', version: '1.0.11'
+    // implementation 'jp.aoichaan0513:JDA_Utils:1.0.12'
+    implementation group: 'jp.aoichaan0513', name: 'JDA_Utils', version: '1.0.12'
 }
 ```
 
@@ -25,8 +25,8 @@ repositories {
 }
 
 dependencies {
-    // implementation("jp.aoichaan0513:JDA_Utils:1.0.11")
-    implementation("jp.aoichaan0513", "JDA_Utils", "1.0.11")
+    // implementation("jp.aoichaan0513:JDA_Utils:1.0.12")
+    implementation("jp.aoichaan0513", "JDA_Utils", "1.0.12")
 }
 ```
 
