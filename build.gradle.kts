@@ -1,23 +1,24 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.4.32"
     maven
 }
 
 group = "jp.aoichaan0513"
-version = "1.0.12"
+version = "1.0.13"
 
 repositories {
     mavenCentral()
     jcenter()
 
+    maven("https://m2.dv8tion.net/releases")
     maven("https://repository.aoichaan0513.jp")
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion", "JDA", "4.2.0_242")
+    implementation("net.dv8tion", "JDA", "4.2.1_253")
     implementation("club.minnced", "discord-webhooks", "0.5.6")
     implementation("joda-time", "joda-time", "2.10.8")
     implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.9")
@@ -28,9 +29,8 @@ java {
     withJavadocJar()
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
 
 val repo = File(rootDir, "repository")
 val uploadArchives: Upload by tasks
