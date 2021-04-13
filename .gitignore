@@ -180,3 +180,4 @@ gradle-app.setting
 
 .idea
 repository/
+local.properties
