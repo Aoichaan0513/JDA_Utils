@@ -75,7 +75,11 @@ fun buildEmbed(embed: MessageEmbed, builder: EmbedBuilder.() -> Unit) = EmbedBui
 
 @DslContext
 class EmbedBuilder {
-    private val DEFAULT_COLOR = 0x1FFFFFFF
+
+    companion object {
+        val ZERO_WIDTH_SPACE = net.dv8tion.jda.api.EmbedBuilder.ZERO_WIDTH_SPACE
+        var DEFAULT_COLOR = 0x1FFFFFFF
+    }
 
     var color: Int = DEFAULT_COLOR
     var author: Author? = null
@@ -291,8 +295,8 @@ class EmbedBuilder {
 
     @DslContext
     class Field(
-        var name: String? = net.dv8tion.jda.api.EmbedBuilder.ZERO_WIDTH_SPACE,
-        var value: String? = net.dv8tion.jda.api.EmbedBuilder.ZERO_WIDTH_SPACE,
+        var name: String? = ZERO_WIDTH_SPACE,
+        var value: String? = ZERO_WIDTH_SPACE,
         var inline: Boolean = false
     )
 
