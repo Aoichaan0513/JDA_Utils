@@ -67,10 +67,24 @@ fun MessageChannel.send(content: Message, allowedMentions: Collection<Message.Me
 
 fun MessageChannel.send(
     content: MessageEmbed,
-    allowedMentions: Collection<Message.MentionType>? = setOf()
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true
 ): MessageAction? {
     if (!hasPermissions(Permission.MESSAGE_WRITE)) return null
-    return sendMessage(content).allowedMentions(allowedMentions)
+    return if (hasPermissions(Permission.MESSAGE_EMBED_LINKS)) {
+        sendMessage(content)
+    } else {
+        if (isEmbedToText) {
+            sendMessage(
+                buildString {
+                    content.title?.run { append("${quote()}\n") }
+                    content.description?.run { append(this) }
+                }
+            )
+        } else {
+            null
+        }
+    }?.allowedMentions(allowedMentions)
 }
 
 
@@ -80,7 +94,7 @@ fun MessageChannel.reply(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!hasPermissions(Permission.MESSAGE_WRITE)) return null
+    if (!hasPermissions(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY)) return null
     return reference.reply(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
 
@@ -90,7 +104,7 @@ fun MessageChannel.reply(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!hasPermissions(Permission.MESSAGE_WRITE)) return null
+    if (!hasPermissions(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY)) return null
     return reference.reply(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
 
@@ -98,8 +112,22 @@ fun MessageChannel.reply(
     reference: Message,
     content: MessageEmbed,
     isRepliedMention: Boolean = false,
-    allowedMentions: Collection<Message.MentionType>? = setOf()
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true
 ): MessageAction? {
-    if (!hasPermissions(Permission.MESSAGE_WRITE)) return null
-    return reference.reply(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
+    if (!hasPermissions(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY)) return null
+    return if (hasPermissions(Permission.MESSAGE_EMBED_LINKS)) {
+        reference.reply(content)
+    } else {
+        if (isEmbedToText) {
+            reference.reply(
+                buildString {
+                    content.title?.run { append("${quote()}\n") }
+                    content.description?.run { append(this) }
+                }
+            )
+        } else {
+            null
+        }
+    }?.mentionRepliedUser(isRepliedMention)?.allowedMentions(allowedMentions)
 }
