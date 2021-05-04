@@ -75,12 +75,7 @@ fun MessageChannel.send(
         sendMessage(content)
     } else {
         if (isEmbedToText) {
-            sendMessage(
-                buildString {
-                    content.title?.run { append("${quote()}\n") }
-                    content.description?.run { append(this) }
-                }
-            )
+            sendMessage(convertText(content))
         } else {
             null
         }
@@ -120,14 +115,65 @@ fun MessageChannel.reply(
         reference.reply(content)
     } else {
         if (isEmbedToText) {
-            reference.reply(
-                buildString {
-                    content.title?.run { append("${quote()}\n") }
-                    content.description?.run { append(this) }
-                }
-            )
+            reference.reply(convertText(content))
         } else {
             null
         }
     }?.mentionRepliedUser(isRepliedMention)?.allowedMentions(allowedMentions)
 }
+
+
+fun Message.edit(
+    content: CharSequence,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+): MessageAction? {
+    if (!channel.hasPermissions(Permission.MESSAGE_WRITE)) return null
+    return editMessage(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
+}
+
+fun Message.edit(
+    content: Message,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+): MessageAction? {
+    if (!channel.hasPermissions(Permission.MESSAGE_WRITE)) return null
+    return editMessage(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
+}
+
+fun Message.edit(
+    content: MessageEmbed,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true
+): MessageAction? {
+    if (!channel.hasPermissions(Permission.MESSAGE_WRITE)) return null
+    return if (channel.hasPermissions(Permission.MESSAGE_EMBED_LINKS)) {
+        editMessage(content)
+    } else {
+        if (isEmbedToText) {
+            editMessage(convertText(content))
+        } else {
+            null
+        }
+    }?.mentionRepliedUser(isRepliedMention)?.allowedMentions(allowedMentions)
+}
+
+
+private fun convertText(messageEmbed: MessageEmbed) = buildString {
+    fun insertText(sourceText: String?, targetText: (String) -> String = { it }) = sourceText?.run {
+        fun isLength(text: String) = (length + text.length) <= Message.MAX_CONTENT_LENGTH
+
+        val text = targetText(this)
+        if (isLength(text))
+            append(text)
+    }
+
+    insertText(messageEmbed.author?.name) { "${it.quote()}\n" }
+    insertText(messageEmbed.title) { "${it.bold().quote()}\n" }
+    insertText(messageEmbed.description) { "$it\n" }
+    messageEmbed.fields.filter { !it.name.isNullOrEmpty() || !it.value.isNullOrEmpty() }.forEach {
+        insertText("${it.name?.let { "${it.bold()} ― " }}${it.value}") { "$it\n" }
+    }
+    insertText(messageEmbed.footer?.text) { it.quote() }
+}.trim()
