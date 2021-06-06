@@ -1,12 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.32"
+    kotlin("jvm") version "1.5.10"
     maven
 }
 
 group = "jp.aoichaan0513"
-version = "1.0.19"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -20,8 +20,8 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("net.dv8tion", "JDA", "4.2.1_269")
     implementation("club.minnced", "discord-webhooks", "0.5.7")
-    implementation("joda-time", "joda-time", "2.10.8")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.1.10")
+    implementation("joda-time", "joda-time", "2.10.10")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.2.0")
 }
 
 java {
