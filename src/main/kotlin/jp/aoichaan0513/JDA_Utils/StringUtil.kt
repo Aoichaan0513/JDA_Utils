@@ -19,8 +19,8 @@ fun fixCase(str: String) = buildString {
         val char = str[i]
         when {
             char == '_' -> append(" ")
-            i == 0 || str[i - 1] == '_' -> append(char.toUpperCase())
-            else -> append(char.toLowerCase())
+            i == 0 || str[i - 1] == '_' -> append(char.uppercase())
+            else -> append(char.lowercase())
         }
     }
 }
