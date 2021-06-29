@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
 
 private val MessageChannel.hasPermission
-    get() = isGuildTextChannel && hasPermissions(Permission.MESSAGE_MANAGE)
+    get() = isGuildTextChannel && hasPermissionsByMember(Permission.MESSAGE_MANAGE)
 
 
 fun Message.removeReaction(reaction: MessageReaction, user: User) {
