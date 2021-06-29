@@ -72,7 +72,7 @@ fun MessageChannel.send(
 ): MessageAction? {
     if (!hasPermissions(Permission.MESSAGE_WRITE)) return null
     return if (hasPermissions(Permission.MESSAGE_EMBED_LINKS)) {
-        sendMessage(content)
+        sendMessageEmbeds(content)
     } else {
         if (isEmbedToText) {
             sendMessage(convertText(content))
@@ -81,6 +81,24 @@ fun MessageChannel.send(
         }
     }?.allowedMentions(allowedMentions)
 }
+
+fun MessageChannel.sendEmbeds(
+    embeds: Collection<MessageEmbed>,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+): MessageAction? {
+    if (!hasPermissions(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)) return null
+    return sendMessageEmbeds(embeds).allowedMentions(allowedMentions)
+}
+
+fun MessageChannel.sendEmbeds(
+    embeds: Iterable<MessageEmbed>,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = sendEmbeds(embeds.toList(), allowedMentions)
+
+fun MessageChannel.sendEmbeds(
+    vararg embeds: MessageEmbed,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = sendEmbeds(embeds.toList(), allowedMentions)
 
 
 fun MessageChannel.reply(
@@ -112,7 +130,7 @@ fun MessageChannel.reply(
 ): MessageAction? {
     if (!hasPermissions(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY)) return null
     return if (hasPermissions(Permission.MESSAGE_EMBED_LINKS)) {
-        reference.reply(content)
+        reference.replyEmbeds(content)
     } else {
         if (isEmbedToText) {
             reference.reply(convertText(content))
@@ -121,6 +139,31 @@ fun MessageChannel.reply(
         }
     }?.mentionRepliedUser(isRepliedMention)?.allowedMentions(allowedMentions)
 }
+
+fun MessageChannel.replyEmbeds(
+    reference: Message,
+    embeds: Collection<MessageEmbed>,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+): MessageAction? {
+    if (!hasPermissions(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY, Permission.MESSAGE_EMBED_LINKS))
+        return null
+    return reference.replyEmbeds(embeds).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
+}
+
+fun MessageChannel.replyEmbeds(
+    reference: Message,
+    embeds: Iterable<MessageEmbed>,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = replyEmbeds(reference, embeds.toList(), isRepliedMention, allowedMentions)
+
+fun MessageChannel.replyEmbeds(
+    reference: Message,
+    vararg embeds: MessageEmbed,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = replyEmbeds(reference, embeds.toList(), isRepliedMention, allowedMentions)
 
 
 fun Message.edit(
@@ -149,7 +192,7 @@ fun Message.edit(
 ): MessageAction? {
     if (!channel.hasPermissions(Permission.MESSAGE_WRITE)) return null
     return if (channel.hasPermissions(Permission.MESSAGE_EMBED_LINKS)) {
-        editMessage(content)
+        editMessageEmbeds(content)
     } else {
         if (isEmbedToText) {
             editMessage(convertText(content))
@@ -158,6 +201,27 @@ fun Message.edit(
         }
     }?.mentionRepliedUser(isRepliedMention)?.allowedMentions(allowedMentions)
 }
+
+fun Message.editEmbeds(
+    embeds: Collection<MessageEmbed>,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+): MessageAction? {
+    if (!channel.hasPermissions(Permission.MESSAGE_WRITE)) return null
+    return editMessageEmbeds(embeds).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
+}
+
+fun Message.editEmbeds(
+    embeds: Iterable<MessageEmbed>,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = editEmbeds(embeds.toList(), isRepliedMention, allowedMentions)
+
+fun Message.editEmbeds(
+    vararg embeds: MessageEmbed,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = editEmbeds(embeds.toList(), isRepliedMention, allowedMentions)
 
 
 private fun convertText(messageEmbed: MessageEmbed) = buildString {
