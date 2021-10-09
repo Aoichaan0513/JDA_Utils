@@ -1,5 +1,7 @@
 package jp.aoichaan0513.JDA_Utils
 
+import jp.aoichaan0513.JDA_Utils.Commons.EmbedBuilder
+import net.dv8tion.jda.api.MessageBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.requests.restaction.MessageAction
@@ -153,6 +155,37 @@ fun MessageChannel.sendEmbeds(
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ) = sendEmbeds(embeds.toList(), allowedMentions)
 
+fun MessageChannel.sendComponents(
+    content: Message,
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true
+): MessageAction? {
+    fun setAction(action: MessageAction?) = action?.allowedMentions(allowedMentions)
+    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    return setAction(
+        if (content.embeds.isNotEmpty()) {
+            if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
+                sendMessage(content)
+            } else {
+                if (isEmbedToText) {
+                    val builder = MessageBuilder(content)
+                    builder.setEmbeds(setOf())
+                    content.embeds.forEach {
+                        builder.append("${EmbedBuilder.ZERO_WIDTH_SPACE}${convertText(it)}")
+                    }
+
+                    builder.buildAll(MessageBuilder.SplitPolicy.onChars(EmbedBuilder.ZERO_WIDTH_SPACE, true))
+                        .map { setAction(sendMessage(it.contentRaw.removePrefix(EmbedBuilder.ZERO_WIDTH_SPACE)))?.queue() }
+                }
+
+                null
+            }
+        } else {
+            sendMessage(content)
+        }
+    )
+}
+
 
 fun MessageChannel.reply(
     reference: Message,
@@ -217,6 +250,41 @@ fun MessageChannel.replyEmbeds(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ) = replyEmbeds(reference, embeds.toList(), isRepliedMention, allowedMentions)
+
+fun MessageChannel.replyComponents(
+    reference: Message,
+    content: Message,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true
+): MessageAction? {
+    fun setAction(action: MessageAction?) =
+        action?.mentionRepliedUser(isRepliedMention)?.allowedMentions(allowedMentions)
+
+    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    return setAction(
+        if (content.embeds.isNotEmpty()) {
+            if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
+                reference.reply(content)
+            } else {
+                if (isEmbedToText) {
+                    val builder = MessageBuilder(content)
+                    builder.setEmbeds(setOf())
+                    content.embeds.forEach {
+                        builder.append("${EmbedBuilder.ZERO_WIDTH_SPACE}${convertText(it)}")
+                    }
+
+                    builder.buildAll(MessageBuilder.SplitPolicy.onChars(EmbedBuilder.ZERO_WIDTH_SPACE, true))
+                        .map { setAction(reference.reply(it.contentRaw.removePrefix(EmbedBuilder.ZERO_WIDTH_SPACE)))?.queue() }
+                }
+
+                null
+            }
+        } else {
+            reference.reply(content)
+        }
+    )
+}
 
 
 fun Message.edit(
