@@ -1,56 +1,84 @@
 package jp.aoichaan0513.JDA_Utils
 
-import jp.aoichaan0513.Kotlin_Utils.getDifference
 import jp.aoichaan0513.Kotlin_Utils.getFormattedDateTime
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.ocpsoft.prettytime.PrettyTime
 import java.time.*
-import kotlin.math.abs
+import java.util.*
 
 val DEFAULT_ZONE_ID
     get() = ZoneId.systemDefault()
 val DEFAULT_PATTERN = "yyyy/MM/dd HH:mm:ss"
 
+
+fun DateTime.getElapsedFormat(locale: Locale, zoneId: ZoneId = DEFAULT_ZONE_ID, dateTime: DateTime = DateTime.now()) =
+    withZone(DateTimeZone.forID(zoneId.id)).toGregorianCalendar().toZonedDateTime().getElapsedFormat(
+        locale,
+        zoneId,
+        dateTime.withZone(DateTimeZone.forID(zoneId.id)).toGregorianCalendar().toZonedDateTime(),
+    )
+
+fun LocalDate.getElapsedFormat(
+    locale: Locale,
+    zoneId: ZoneId = DEFAULT_ZONE_ID,
+    localDate: LocalDate = LocalDate.now(),
+) = atStartOfDay(zoneId).getElapsedFormat(locale, zoneId, localDate.atStartOfDay(zoneId))
+
+fun LocalDateTime.getElapsedFormat(
+    locale: Locale,
+    zoneId: ZoneId = DEFAULT_ZONE_ID,
+    localDateTime: LocalDateTime = LocalDateTime.now()
+) = atZone(zoneId).getElapsedFormat(locale, zoneId, localDateTime.atZone(zoneId))
+
+fun OffsetDateTime.getElapsedFormat(
+    locale: Locale,
+    zoneId: ZoneId = DEFAULT_ZONE_ID,
+    offsetDateTime: OffsetDateTime = OffsetDateTime.now()
+) = atZoneSameInstant(zoneId).getElapsedFormat(locale, zoneId, offsetDateTime.atZoneSameInstant(zoneId))
+
+fun ZonedDateTime.getElapsedFormat(
+    locale: Locale,
+    zoneId: ZoneId = DEFAULT_ZONE_ID,
+    zonedDateTime: ZonedDateTime = ZonedDateTime.now()
+): String {
+    val prettyTime = PrettyTime(locale)
+    prettyTime.reference = zonedDateTime.withZoneSameInstant(zoneId).toInstant()
+    return prettyTime.format(withZoneSameInstant(zoneId))
+}
+
+
 fun DateTime.getFormattedTimestamp(
+    locale: Locale,
     zoneId: ZoneId = DEFAULT_ZONE_ID,
     pattern: String = DEFAULT_PATTERN,
     dateTime: DateTime = DateTime.now()
-): String {
-    val difference = getDifference(dateTime)
-    return "${getFormattedDateTime(zoneId, pattern).bold()} (${if (difference < 0) "+" else "-"}${abs(difference)})"
-}
+) = "${getFormattedDateTime(zoneId, pattern).bold()} (${getElapsedFormat(locale, zoneId, dateTime)})"
 
 fun LocalDate.getFormattedTimestamp(
+    locale: Locale,
     zoneId: ZoneId = DEFAULT_ZONE_ID,
     pattern: String = DEFAULT_PATTERN,
     localDate: LocalDate = LocalDate.now()
-): String {
-    val difference = getDifference(localDate)
-    return "${getFormattedDateTime(zoneId, pattern).bold()} (${if (difference < 0) "+" else "-"}${abs(difference)})"
-}
+) = "${getFormattedDateTime(zoneId, pattern).bold()} (${getElapsedFormat(locale, zoneId, localDate)})"
 
 fun LocalDateTime.getFormattedTimestamp(
+    locale: Locale,
     zoneId: ZoneId = DEFAULT_ZONE_ID,
     pattern: String = DEFAULT_PATTERN,
     localDateTime: LocalDateTime = LocalDateTime.now()
-): String {
-    val difference = getDifference(localDateTime)
-    return "${getFormattedDateTime(zoneId, pattern).bold()} (${if (difference < 0) "+" else "-"}${abs(difference)})"
-}
+) = "${getFormattedDateTime(zoneId, pattern).bold()} (${getElapsedFormat(locale, zoneId, localDateTime)})"
 
 fun OffsetDateTime.getFormattedTimestamp(
+    locale: Locale,
     zoneId: ZoneId = DEFAULT_ZONE_ID,
     pattern: String = DEFAULT_PATTERN,
     offsetDateTime: OffsetDateTime = OffsetDateTime.now()
-): String {
-    val difference = getDifference(offsetDateTime)
-    return "${getFormattedDateTime(zoneId, pattern).bold()} (${if (difference < 0) "+" else "-"}${abs(difference)})"
-}
+) = "${getFormattedDateTime(zoneId, pattern).bold()} (${getElapsedFormat(locale, zoneId, offsetDateTime)})"
 
 fun ZonedDateTime.getFormattedTimestamp(
+    locale: Locale,
     zoneId: ZoneId = DEFAULT_ZONE_ID,
     pattern: String = DEFAULT_PATTERN,
     zonedDateTime: ZonedDateTime = ZonedDateTime.now()
-): String {
-    val difference = getDifference(zonedDateTime)
-    return "${getFormattedDateTime(zoneId, pattern).bold()} (${if (difference < 0) "+" else "-"}${abs(difference)})"
-}
+) = "${getFormattedDateTime(zoneId, pattern).bold()} (${getElapsedFormat(locale, zoneId, zonedDateTime)})"
