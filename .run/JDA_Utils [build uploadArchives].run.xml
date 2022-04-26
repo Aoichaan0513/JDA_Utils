@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="JDA_Utils [build uploadArchives]" type="GradleRunConfiguration"
+    <configuration default="false" name="JDA_Utils [clean build uploadArchives]" type="GradleRunConfiguration"
                    factoryName="Gradle" nameIsGenerated="true">
         <ExternalSystemSettings>
             <option name="executionName"/>
@@ -11,6 +11,7 @@
             </option>
             <option name="taskNames">
                 <list>
+                    <option value="clean"/>
                     <option value="build"/>
                     <option value="uploadArchives"/>
                 </list>
