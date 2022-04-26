@@ -132,6 +132,40 @@ suspend inline fun ShardManager.button(
 
 
 suspend inline fun JDA.selectMenu(
+    options: Collection<SelectOption> = emptyList(),
+    placeholder: String? = null,
+    minValue: Int = 1,
+    maxValue: Int = 1,
+    expiration: Long = TimeUnit.MINUTES.toMillis(15),
+    user: User? = null,
+    crossinline listener: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
+): SelectMenu {
+    val id = ThreadLocalRandom.current().nextLong().toString()
+    val selectMenu = SelectMenu.create(id).apply {
+        addOptions(options)
+        this.placeholder = placeholder
+        setRequiredRange(minValue, maxValue)
+    }.build()
+
+    val task = onSelectMenu(id) {
+        if (user == null || user == it.user)
+            listener(it)
+
+        if (!it.isAcknowledged)
+            it.deferEdit().queue()
+    }
+
+    if (expiration > 0) {
+        GlobalScope.launch {
+            delay(expiration)
+            removeEventListener(task)
+        }
+    }
+
+    return selectMenu
+}
+
+suspend inline fun JDA.selectMenu(
     options: Array<SelectOption> = emptyArray(),
     placeholder: String? = null,
     minValue: Int = 1,
@@ -143,6 +177,40 @@ suspend inline fun JDA.selectMenu(
     val id = ThreadLocalRandom.current().nextLong().toString()
     val selectMenu = SelectMenu.create(id).apply {
         addOptions(*options)
+        this.placeholder = placeholder
+        setRequiredRange(minValue, maxValue)
+    }.build()
+
+    val task = onSelectMenu(id) {
+        if (user == null || user == it.user)
+            listener(it)
+
+        if (!it.isAcknowledged)
+            it.deferEdit().queue()
+    }
+
+    if (expiration > 0) {
+        GlobalScope.launch {
+            delay(expiration)
+            removeEventListener(task)
+        }
+    }
+
+    return selectMenu
+}
+
+suspend inline fun ShardManager.selectMenu(
+    options: Collection<SelectOption> = emptyList(),
+    placeholder: String? = null,
+    minValue: Int = 1,
+    maxValue: Int = 1,
+    expiration: Long = TimeUnit.MINUTES.toMillis(15),
+    user: User? = null,
+    crossinline listener: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
+): SelectMenu {
+    val id = ThreadLocalRandom.current().nextLong().toString()
+    val selectMenu = SelectMenu.create(id).apply {
+        addOptions(options)
         this.placeholder = placeholder
         setRequiredRange(minValue, maxValue)
     }.build()
