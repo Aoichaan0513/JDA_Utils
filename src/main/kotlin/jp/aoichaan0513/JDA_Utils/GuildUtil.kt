@@ -3,6 +3,7 @@ package jp.aoichaan0513.JDA_Utils
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Role
+import net.dv8tion.jda.api.entities.UserSnowflake
 
 fun Guild.addRolesToMember(member: Member, collection: Collection<Role>) {
     collection.forEach { addRoleToMember(member, it).queue({}) {} }
@@ -17,7 +18,7 @@ fun Guild.addRolesToMember(member: Member, vararg array: Role) {
 }
 
 fun Guild.addRolesToMember(id: Long, collection: Collection<Role>) {
-    collection.forEach { addRoleToMember(id, it).queue({}) {} }
+    collection.forEach { addRoleToMember(UserSnowflake.fromId(id), it).queue({}) {} }
 }
 
 fun Guild.addRolesToMember(id: Long, iterable: Iterable<Role>) {
@@ -29,7 +30,7 @@ fun Guild.addRolesToMember(id: Long, vararg array: Role) {
 }
 
 fun Guild.addRolesToMember(id: String, collection: Collection<Role>) {
-    collection.forEach { addRoleToMember(id, it).queue({}) {} }
+    collection.forEach { addRoleToMember(UserSnowflake.fromId(id), it).queue({}) {} }
 }
 
 fun Guild.addRolesToMember(id: String, iterable: Iterable<Role>) {
@@ -54,7 +55,7 @@ fun Guild.removeRolesFromMember(member: Member, vararg array: Role) {
 }
 
 fun Guild.removeRolesFromMember(id: Long, collection: Collection<Role>) {
-    collection.forEach { removeRoleFromMember(id, it).queue({}) {} }
+    collection.forEach { removeRoleFromMember(UserSnowflake.fromId(id), it).queue({}) {} }
 }
 
 fun Guild.removeRolesFromMember(id: Long, iterable: Iterable<Role>) {
@@ -66,7 +67,7 @@ fun Guild.removeRolesFromMember(id: Long, vararg array: Role) {
 }
 
 fun Guild.removeRolesFromMember(id: String, collection: Collection<Role>) {
-    collection.forEach { removeRoleFromMember(id, it).queue({}) {} }
+    collection.forEach { removeRoleFromMember(UserSnowflake.fromId(id), it).queue({}) {} }
 }
 
 fun Guild.removeRolesFromMember(id: String, iterable: Iterable<Role>) {

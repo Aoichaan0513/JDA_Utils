@@ -13,97 +13,75 @@ val MessageChannel.isPrivateChannel
 val MessageChannel.isGuildChannel
     get() = this is GuildChannel
 
-val MessageChannel.isTextChannel
+val Channel.isTextChannel
     get() = isGuildTextChannel || isPrivateTextChannel
 
-val GuildChannel.isTextChannel
-    get() = isGuildTextChannel || isPrivateTextChannel
-
-val MessageChannel.isGuildTextChannel
+val Channel.isGuildTextChannel
     get() = type == ChannelType.TEXT
 
-val GuildChannel.isGuildTextChannel
-    get() = type == ChannelType.TEXT
-
-val MessageChannel.isPrivateTextChannel
-    get() = type == ChannelType.PRIVATE || type == ChannelType.GROUP
-
-val GuildChannel.isPrivateTextChannel
+val Channel.isPrivateTextChannel
     get() = type == ChannelType.PRIVATE || type == ChannelType.GROUP
 
 
-fun MessageChannel.hasAccessByMember(member: Member? = null) =
+val GuildChannel.parentCategory
+    get() = (this as? ICategorizableChannel)?.parentCategory
+
+val GuildChannel.parentCategoryId
+    get() = (this as? ICategorizableChannel)?.parentCategoryId
+
+val GuildChannel.parentCategoryIdLong
+    get() = (this as? ICategorizableChannel)?.parentCategoryIdLong
+
+
+val GuildChannel.position
+    get() = (this as? IPositionableChannel)?.position
+
+val GuildChannel.positionRaw
+    get() = (this as? IPositionableChannel)?.positionRaw
+
+
+val AudioChannel.userLimit
+    get() = (this as? VoiceChannel)?.userLimit
+
+
+fun Channel.hasAccessByMember(member: Member? = null) =
     this !is GuildChannel || (member ?: guild.selfMember).hasAccess(this)
 
-fun MessageChannel.hasAccessByRole(role: Role? = null) =
+fun Channel.hasAccessByRole(role: Role? = null) =
     this !is GuildChannel || (role ?: guild.publicRole).hasAccess(this)
 
-fun GuildChannel.hasAccessByMember(member: Member? = null) =
-    (member ?: guild.selfMember).hasAccess(this)
 
-fun GuildChannel.hasAccessByRole(role: Role? = null) =
-    (role ?: guild.publicRole).hasAccess(this)
+private fun Channel.hasPermissions(permissions: Collection<Permission?>, holder: IPermissionHolder) =
+    this !is GuildChannel || holder.hasPermission(this, permissions.filterNotNull())
 
+private fun Channel.hasPermissions(iterable: Iterable<Permission?>, holder: IPermissionHolder) =
+    hasPermissions(iterable.toSet(), holder)
 
-private fun MessageChannel.hasPermissions(permissions: Collection<Permission?>, iPermissionHolder: IPermissionHolder) =
-    this !is GuildChannel || iPermissionHolder.hasPermission(this, permissions.filterNotNull())
+private fun Channel.hasPermissions(vararg array: Permission?, holder: IPermissionHolder) =
+    hasPermissions(array.toSet(), holder)
 
-private fun MessageChannel.hasPermissions(iterable: Iterable<Permission?>, iPermissionHolder: IPermissionHolder) =
-    hasPermissions(iterable.toSet(), iPermissionHolder)
-
-private fun MessageChannel.hasPermissions(vararg array: Permission?, iPermissionHolder: IPermissionHolder) =
-    hasPermissions(array.toSet(), iPermissionHolder)
-
-fun MessageChannel.hasPermissionsByMember(permissions: Collection<Permission?>, member: Member? = null) =
-    this !is GuildChannel || (this as GuildChannel).hasPermissions(
+fun Channel.hasPermissionsByMember(permissions: Collection<Permission?>, member: Member? = null) =
+    this !is GuildChannel || hasPermissions(
         permissions,
         (member ?: guild.selfMember) as IPermissionHolder
     )
 
-fun MessageChannel.hasPermissionsByMember(iterable: Iterable<Permission?>, member: Member? = null) =
+fun Channel.hasPermissionsByMember(iterable: Iterable<Permission?>, member: Member? = null) =
     hasPermissionsByMember(iterable.toSet(), member)
 
-fun MessageChannel.hasPermissionsByMember(vararg array: Permission?, member: Member? = null) =
+fun Channel.hasPermissionsByMember(vararg array: Permission?, member: Member? = null) =
     hasPermissionsByMember(array.toSet(), member)
 
-fun MessageChannel.hasPermissionsByRole(permissions: Collection<Permission?>, role: Role? = null) =
-    this !is GuildChannel || (this as GuildChannel).hasPermissions(
+fun Channel.hasPermissionsByRole(permissions: Collection<Permission?>, role: Role? = null) =
+    this !is GuildChannel || hasPermissions(
         permissions,
         (role ?: guild.publicRole) as IPermissionHolder
     )
 
-fun MessageChannel.hasPermissionsByRole(iterable: Iterable<Permission?>, role: Role? = null) =
+fun Channel.hasPermissionsByRole(iterable: Iterable<Permission?>, role: Role? = null) =
     hasPermissionsByRole(iterable.toSet(), role)
 
-fun MessageChannel.hasPermissionsByRole(vararg array: Permission?, role: Role? = null) =
-    hasPermissionsByRole(array.toSet(), role)
-
-
-private fun GuildChannel.hasPermissions(permissions: Collection<Permission?>, iPermissionHolder: IPermissionHolder) =
-    iPermissionHolder.hasPermission(this, permissions.filterNotNull())
-
-private fun GuildChannel.hasPermissions(iterable: Iterable<Permission?>, iPermissionHolder: IPermissionHolder) =
-    hasPermissions(iterable.toSet(), iPermissionHolder)
-
-private fun GuildChannel.hasPermissions(vararg array: Permission?, iPermissionHolder: IPermissionHolder) =
-    hasPermissions(array.toSet(), iPermissionHolder)
-
-fun GuildChannel.hasPermissionsByMember(permissions: Collection<Permission?>, member: Member? = null) =
-    hasPermissions(permissions, (member ?: guild.selfMember) as IPermissionHolder)
-
-fun GuildChannel.hasPermissionsByMember(iterable: Iterable<Permission?>, member: Member? = null) =
-    hasPermissionsByMember(iterable.toSet(), member)
-
-fun GuildChannel.hasPermissionsByMember(vararg array: Permission?, member: Member? = null) =
-    hasPermissionsByMember(array.toSet(), member)
-
-fun GuildChannel.hasPermissionsByRole(permissions: Collection<Permission?>, role: Role? = null) =
-    hasPermissions(permissions, (role ?: guild.publicRole) as IPermissionHolder)
-
-fun GuildChannel.hasPermissionsByRole(iterable: Iterable<Permission?>, role: Role? = null) =
-    hasPermissionsByRole(iterable.toSet(), role)
-
-fun GuildChannel.hasPermissionsByRole(vararg array: Permission?, role: Role? = null) =
+fun Channel.hasPermissionsByRole(vararg array: Permission?, role: Role? = null) =
     hasPermissionsByRole(array.toSet(), role)
 
 
@@ -111,12 +89,12 @@ fun MessageChannel.send(
     content: CharSequence,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return sendMessage(content).allowedMentions(allowedMentions)
 }
 
 fun MessageChannel.send(content: Message, allowedMentions: Collection<Message.MentionType>? = setOf()): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return sendMessage(content).allowedMentions(allowedMentions)
 }
 
@@ -125,7 +103,7 @@ fun MessageChannel.send(
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true
 ): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
         sendMessageEmbeds(content)
     } else {
@@ -141,7 +119,7 @@ fun MessageChannel.sendEmbeds(
     embeds: Collection<MessageEmbed>,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_EMBED_LINKS)) return null
     return sendMessageEmbeds(embeds).allowedMentions(allowedMentions)
 }
 
@@ -161,7 +139,7 @@ fun MessageChannel.sendComponents(
     isEmbedToText: Boolean = true
 ): MessageAction? {
     fun setAction(action: MessageAction?) = action?.allowedMentions(allowedMentions)
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return setAction(
         if (content.embeds.isNotEmpty()) {
             if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
@@ -193,7 +171,7 @@ fun MessageChannel.reply(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY)) return null
     return reference.reply(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
 
@@ -203,7 +181,7 @@ fun MessageChannel.reply(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY)) return null
     return reference.reply(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
 
@@ -214,7 +192,7 @@ fun MessageChannel.reply(
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true
 ): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY)) return null
     return if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
         reference.replyEmbeds(content)
     } else {
@@ -232,7 +210,7 @@ fun MessageChannel.replyEmbeds(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE, Permission.MESSAGE_HISTORY, Permission.MESSAGE_EMBED_LINKS))
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY, Permission.MESSAGE_EMBED_LINKS))
         return null
     return reference.replyEmbeds(embeds).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
@@ -261,7 +239,7 @@ fun MessageChannel.replyComponents(
     fun setAction(action: MessageAction?) =
         action?.mentionRepliedUser(isRepliedMention)?.allowedMentions(allowedMentions)
 
-    if (!hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return setAction(
         if (content.embeds.isNotEmpty()) {
             if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
@@ -292,7 +270,7 @@ fun Message.edit(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!channel.hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!channel.hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return editMessage(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
 
@@ -301,7 +279,7 @@ fun Message.edit(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!channel.hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!channel.hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return editMessage(content).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
 
@@ -311,7 +289,7 @@ fun Message.edit(
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true
 ): MessageAction? {
-    if (!channel.hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!channel.hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return if (channel.hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
         editMessageEmbeds(content)
     } else {
@@ -328,7 +306,7 @@ fun Message.editEmbeds(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageAction? {
-    if (!channel.hasPermissionsByMember(Permission.MESSAGE_WRITE)) return null
+    if (!channel.hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
     return editMessageEmbeds(embeds).mentionRepliedUser(isRepliedMention).allowedMentions(allowedMentions)
 }
 
