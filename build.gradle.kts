@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "jp.aoichaan0513"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.8"
 
 repositories {
     mavenCentral()
@@ -26,8 +26,8 @@ dependencies {
     implementation("net.dv8tion", "JDA", "5.0.0-alpha.11")
     implementation("club.minnced", "discord-webhooks", "0.8.0")
     implementation("joda-time", "joda-time", "2.10.14")
-    implementation("org.ocpsoft.prettytime", "prettytime", "5.0.2.Final")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.4.0")
+    implementation("org.ocpsoft.prettytime", "prettytime", "5.0.3.Final")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.4.1")
 }
 
 java {

@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
@@ -32,22 +31,6 @@ inline fun <reified T : GenericComponentInteractionCreateEvent> ShardManager.onC
     crossinline consumer: ComponentEventListener.(T) -> Unit
 ) = listener<T> {
     if (it.componentId == customId)
-        consumer(it)
-}
-
-inline fun JDA.onCommand(
-    name: String,
-    crossinline consumer: ComponentEventListener.(SlashCommandInteractionEvent) -> Unit
-) = listener<SlashCommandInteractionEvent> {
-    if (it.name == name)
-        consumer(it)
-}
-
-inline fun ShardManager.onCommand(
-    name: String,
-    crossinline consumer: ComponentEventListener.(SlashCommandInteractionEvent) -> Unit
-) = listener<SlashCommandInteractionEvent> {
-    if (it.name == name)
         consumer(it)
 }
 
