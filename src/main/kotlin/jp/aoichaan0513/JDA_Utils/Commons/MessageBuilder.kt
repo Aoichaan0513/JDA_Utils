@@ -15,7 +15,7 @@ fun buildMessage(builder: MessageBuilder.() -> Unit) = MessageBuilder().apply(bu
  *
  * @author Aoichaan0513
  */
-fun buildEmbed(message: MessageBuilder, builder: MessageBuilder.() -> Unit) = MessageBuilder().apply {
+fun buildMessage(message: MessageBuilder, builder: MessageBuilder.() -> Unit) = MessageBuilder().apply {
     allowedMentions = message.allowedMentions
     nonce = message.nonce
     tts = message.tts
