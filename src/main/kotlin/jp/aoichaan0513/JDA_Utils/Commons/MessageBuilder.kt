@@ -122,5 +122,5 @@ class MessageBuilder {
      *
      * @author Aoichaan0513
      */
-    fun buildEmbed() = build().build()
+    fun buildMessage() = build().build()
 }
