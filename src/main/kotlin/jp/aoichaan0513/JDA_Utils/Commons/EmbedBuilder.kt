@@ -1,6 +1,5 @@
 package jp.aoichaan0513.JDA_Utils.Commons
 
-import jp.aoichaan0513.JDA_Utils.effectiveAvatarUrl
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
@@ -18,9 +17,9 @@ import java.time.temporal.TemporalAccessor
 fun buildEmbed(builder: EmbedBuilder.() -> Unit) = EmbedBuilder().apply(builder)
 
 /**
- * Build new embed from [net.dv8tion.jda.api.EmbedBuilder].
+ * Build new embed from [EmbedBuilder].
  *
- * @param embed Embed object ([net.dv8tion.jda.api.EmbedBuilder])
+ * @param embed [EmbedBuilder] object
  * @param builder Builder object
  *
  * @author Aoichaan0513
@@ -48,7 +47,7 @@ fun buildEmbed(embed: EmbedBuilder, builder: EmbedBuilder.() -> Unit) = EmbedBui
 /**
  * Build new embed from [MessageEmbed].
  *
- * @param embed Embed object ([MessageEmbed])
+ * @param embed [MessageEmbed] object
  * @param builder Builder object
  *
  * @author Aoichaan0513
@@ -262,7 +261,7 @@ class EmbedBuilder {
     /**
      * Build embed.
      *
-     * @return [net.dv8tion.jda.apiEmbedBuilder]
+     * @return [net.dv8tion.jda.api.EmbedBuilder]
      *
      * @author Aoichaan0513
      */
