@@ -275,7 +275,7 @@ class EmbedBuilder {
             .setThumbnail(thumbnail)
             .setFooter(footer?.text, footer?.iconUrl)
             .setTimestamp(timestamp)
-        fields.forEach { embedBuilder.addField(it.name, it.value, it.inline) }
+        fields.forEach { embedBuilder.addField(it.name ?: ZERO_WIDTH_SPACE, it.value ?: ZERO_WIDTH_SPACE, it.inline) }
         return embedBuilder
     }
 

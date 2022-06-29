@@ -1,7 +1,11 @@
 package jp.aoichaan0513.JDA_Utils
 
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.MessageReaction
+import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.entities.emoji.Emoji
 
 private val MessageChannel.hasPermission
     get() = isGuildTextChannel && hasPermissionsByMember(Permission.MESSAGE_MANAGE)
@@ -16,14 +20,9 @@ fun Message.removeReaction(reaction: MessageReaction, user: User) {
     reaction.removeReaction(user).queue({}) {}
 }
 
-fun Message.removeReactions(str: String) {
+fun Message.removeReactions(emoji: Emoji) {
     if (channel.hasPermission)
-        clearReactions(str).queue({}) {}
-}
-
-fun Message.removeReactions(emote: Emote) {
-    if (channel.hasPermission)
-        clearReactions(emote).queue({}) {}
+        clearReactions(emoji).queue({}) {}
 }
 
 fun Message.removeReactions(reaction: MessageReaction) {
