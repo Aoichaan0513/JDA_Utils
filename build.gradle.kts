@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val kotlinVersion: String by extra("1.6.20")
+val kotlinVersion: String by extra("1.6.21")
 
 plugins {
-    kotlin("jvm") version "1.6.20"
+    kotlin("jvm") version "1.6.21"
     maven
 }
 
