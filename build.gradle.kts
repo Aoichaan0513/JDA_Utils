@@ -27,7 +27,7 @@ dependencies {
     implementation("club.minnced", "discord-webhooks", "0.8.0")
     implementation("joda-time", "joda-time", "2.10.14")
     implementation("org.ocpsoft.prettytime", "prettytime", "5.0.3.Final")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.4.2")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.4.3")
 }
 
 java {
