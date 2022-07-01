@@ -36,7 +36,7 @@ java {
 }
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
 
 val repo = File(rootDir, "repository")
 val uploadArchives: Upload by tasks
