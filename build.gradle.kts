@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "jp.aoichaan0513"
-version = "2.0.0-beta.3"
+version = "2.0.0-beta.4"
 
 repositories {
     mavenCentral()
@@ -37,6 +37,7 @@ java {
 
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
+compileKotlin.kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
 
 val repo = File(rootDir, "repository")
 val uploadArchives: Upload by tasks
