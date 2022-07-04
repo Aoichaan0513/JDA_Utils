@@ -59,13 +59,18 @@ inline fun ShardManager.onSelectMenu(
 inline fun JDA.onModal(
     id: String,
     crossinline consumer: ComponentEventListener.(ModalInteractionEvent) -> Unit
-) = onComponent(id, consumer)
+) = listener<ModalInteractionEvent> {
+    if (it.modalId == id)
+        consumer(it)
+}
 
 inline fun ShardManager.onModal(
     id: String,
     crossinline consumer: ComponentEventListener.(ModalInteractionEvent) -> Unit
-) = onComponent(id, consumer)
-
+) = listener<ModalInteractionEvent> {
+    if (it.modalId == id)
+        consumer(it)
+}
 
 @OptIn(DelicateCoroutinesApi::class)
 suspend inline fun JDA.button(
