@@ -1,12 +1,14 @@
 package jp.aoichaan0513.JDA_Utils
 
 import jp.aoichaan0513.JDA_Utils.Commons.ComponentEventListener
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.entities.emoji.Emoji
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
@@ -54,7 +56,18 @@ inline fun ShardManager.onSelectMenu(
     crossinline consumer: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
 ) = onComponent(id, consumer)
 
+inline fun JDA.onModal(
+    id: String,
+    crossinline consumer: ComponentEventListener.(ModalInteractionEvent) -> Unit
+) = onComponent(id, consumer)
 
+inline fun ShardManager.onModal(
+    id: String,
+    crossinline consumer: ComponentEventListener.(ModalInteractionEvent) -> Unit
+) = onComponent(id, consumer)
+
+
+@OptIn(DelicateCoroutinesApi::class)
 suspend inline fun JDA.button(
     style: ButtonStyle = ButtonStyle.SECONDARY,
     label: String? = null,
@@ -84,6 +97,7 @@ suspend inline fun JDA.button(
     return button
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 suspend inline fun ShardManager.button(
     style: ButtonStyle = ButtonStyle.SECONDARY,
     label: String? = null,
@@ -114,6 +128,7 @@ suspend inline fun ShardManager.button(
 }
 
 
+@OptIn(DelicateCoroutinesApi::class)
 suspend inline fun JDA.selectMenu(
     options: Collection<SelectOption> = emptyList(),
     placeholder: String? = null,
@@ -148,6 +163,7 @@ suspend inline fun JDA.selectMenu(
     return selectMenu
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 suspend inline fun JDA.selectMenu(
     options: Array<SelectOption> = emptyArray(),
     placeholder: String? = null,
@@ -182,6 +198,7 @@ suspend inline fun JDA.selectMenu(
     return selectMenu
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 suspend inline fun ShardManager.selectMenu(
     options: Collection<SelectOption> = emptyList(),
     placeholder: String? = null,
@@ -216,6 +233,7 @@ suspend inline fun ShardManager.selectMenu(
     return selectMenu
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 suspend inline fun ShardManager.selectMenu(
     options: Array<SelectOption> = emptyArray(),
     placeholder: String? = null,
