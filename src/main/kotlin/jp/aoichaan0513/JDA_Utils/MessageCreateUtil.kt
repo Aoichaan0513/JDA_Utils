@@ -70,43 +70,69 @@ fun MessageChannel.sendEmbeds(
 ) = sendEmbeds(embeds.toList(), allowedMentions)
 
 fun MessageChannel.sendComponents(
-    content: Message,
+    content: MessageCreateData,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
-    isEmbedToText: Boolean = true
-): MessageCreateAction? {
-    fun setAction(action: MessageCreateAction?) = action?.setAllowedMentions(allowedMentions)
-    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
+    isEmbedToText: Boolean = true,
+    action: (MessageCreateAction) -> Unit
+) {
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return
 
-    return setAction(
+    fun setAction(action: MessageCreateAction?) = action?.setAllowedMentions(allowedMentions)
+
+    val data = setAction(
         if (content.embeds.isNotEmpty()) {
             if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
-                sendMessage(MessageCreateData.fromMessage(content))
+                sendMessage(content)
             } else {
-                if (isEmbedToText) {
-                    val builder = MessageCreateBuilder.fromMessage(content)
-                    builder.setEmbeds(setOf())
-                    content.embeds.forEach {
-                        builder.addContent("${ZERO_WIDTH_SPACE}${it.toText()}")
-                    }
+                if (!isEmbedToText)
+                    return
 
-                    SplitUtil.split(
-                        builder.content,
-                        2000,
-                        true,
-                        SplitUtil.Strategy.onChar(ZERO_WIDTH_SPACE),
-                        SplitUtil.Strategy.ANYWHERE
-                    ).forEach {
-                        setAction(sendMessage(it.removePrefix(ZERO_WIDTH_SPACE.toString())))?.queue()
-                    }
+                val builder = MessageCreateBuilder.from(content)
+                builder.setEmbeds(setOf())
+                content.embeds.forEach {
+                    builder.addContent("${ZERO_WIDTH_SPACE}${it.toText()}")
                 }
 
-                null
+                SplitUtil.split(
+                    builder.content,
+                    2000,
+                    true,
+                    SplitUtil.Strategy.onChar(ZERO_WIDTH_SPACE),
+                    SplitUtil.Strategy.ANYWHERE
+                ).mapNotNull { setAction(sendMessage(it.removePrefix(ZERO_WIDTH_SPACE.toString()))) }.forEach(action)
+                return
             }
         } else {
-            sendMessage(MessageCreateData.fromMessage(content))
+            sendMessage(content)
         }
-    )
+    ) ?: return
+
+    action(data)
 }
+
+fun MessageChannel.sendComponents(
+    content: CharSequence,
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true,
+    action: (MessageCreateAction) -> Unit
+) = sendComponents(
+    MessageCreateData.fromContent(content.toString()),
+    allowedMentions,
+    isEmbedToText,
+    action
+)
+
+fun MessageChannel.sendComponents(
+    content: Message,
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true,
+    action: (MessageCreateAction) -> Unit
+) = sendComponents(
+    MessageCreateData.fromMessage(content),
+    allowedMentions,
+    isEmbedToText,
+    action
+)
 
 
 fun MessageChannel.reply(
@@ -186,42 +212,76 @@ fun MessageChannel.replyEmbeds(
 
 fun MessageChannel.replyComponents(
     reference: Message,
-    content: Message,
+    content: MessageCreateData,
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
-    isEmbedToText: Boolean = true
-): MessageCreateAction? {
+    isEmbedToText: Boolean = true,
+    action: (MessageCreateAction) -> Unit
+) {
+    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return
+
     fun setAction(action: MessageCreateAction?) =
         action?.mentionRepliedUser(isRepliedMention)?.setAllowedMentions(allowedMentions)
 
-    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
-    return setAction(
+    val data = setAction(
         if (content.embeds.isNotEmpty()) {
             if (hasPermissionsByMember(Permission.MESSAGE_EMBED_LINKS)) {
-                reference.reply(MessageCreateData.fromMessage(content))
+                reference.reply(content)
             } else {
-                if (isEmbedToText) {
-                    val builder = MessageCreateBuilder.fromMessage(content)
-                    builder.setEmbeds(setOf())
-                    content.embeds.forEach {
-                        builder.addContent("${ZERO_WIDTH_SPACE}${it.toText()}")
-                    }
+                if (!isEmbedToText)
+                    return
 
-                    SplitUtil.split(
-                        builder.content,
-                        2000,
-                        true,
-                        SplitUtil.Strategy.onChar(ZERO_WIDTH_SPACE),
-                        SplitUtil.Strategy.ANYWHERE
-                    ).forEach {
-                        setAction(sendMessage(it.removePrefix(ZERO_WIDTH_SPACE.toString())))?.queue()
-                    }
+                val builder = MessageCreateBuilder.from(content)
+                builder.setEmbeds(setOf())
+                content.embeds.forEach {
+                    builder.addContent("${ZERO_WIDTH_SPACE}${it.toText()}")
                 }
 
-                null
+                SplitUtil.split(
+                    builder.content,
+                    2000,
+                    true,
+                    SplitUtil.Strategy.onChar(ZERO_WIDTH_SPACE),
+                    SplitUtil.Strategy.ANYWHERE
+                ).mapNotNull { setAction(sendMessage(it.removePrefix(ZERO_WIDTH_SPACE.toString()))) }.forEach(action)
+                return
             }
         } else {
-            reference.reply(MessageCreateData.fromMessage(content))
+            reference.reply(content)
         }
-    )
+    ) ?: return
+
+    action(data)
 }
+
+fun MessageChannel.replyComponents(
+    reference: Message,
+    content: CharSequence,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true,
+    action: (MessageCreateAction) -> Unit
+) = replyComponents(
+    reference,
+    MessageCreateData.fromContent(content.toString()),
+    isRepliedMention,
+    allowedMentions,
+    isEmbedToText,
+    action
+)
+
+fun MessageChannel.replyComponents(
+    reference: Message,
+    content: Message,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf(),
+    isEmbedToText: Boolean = true,
+    action: (MessageCreateAction) -> Unit
+) = replyComponents(
+    reference,
+    MessageCreateData.fromMessage(content),
+    isRepliedMention,
+    allowedMentions,
+    isEmbedToText,
+    action
+)
