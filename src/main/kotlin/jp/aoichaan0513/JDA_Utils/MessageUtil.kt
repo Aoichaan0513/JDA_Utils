@@ -1,10 +1,7 @@
 package jp.aoichaan0513.JDA_Utils
 
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.MessageChannel
-import net.dv8tion.jda.api.entities.MessageReaction
-import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.entities.emoji.Emoji
 
 private val MessageChannel.hasPermission
@@ -34,3 +31,22 @@ fun Message.removeReactions() {
     if (channel.hasPermission)
         clearReactions().queue({}) {}
 }
+
+
+fun MessageEmbed.toText() = buildString {
+    fun insertText(sourceText: String?, targetText: (String) -> String = { it }) = sourceText?.run {
+        fun isLength(text: String) = (length + text.length) <= Message.MAX_CONTENT_LENGTH
+
+        val text = targetText(this)
+        if (isLength(text))
+            append(text)
+    }
+
+    insertText(author?.name) { "${it.quote()}\n" }
+    insertText(title) { "${it.bold().quote()}\n" }
+    insertText(description) { "$it\n" }
+    fields.filter { !it.name.isNullOrEmpty() || !it.value.isNullOrEmpty() }.forEach {
+        insertText("${it.name?.let { "${it.bold()} ― " }}${it.value}") { "$it\n" }
+    }
+    insertText(footer?.text) { it.quote() }
+}.trim()

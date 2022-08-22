@@ -3,7 +3,7 @@ package jp.aoichaan0513.JDA_Utils.Commons
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.Message.MentionType
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.interactions.components.ActionRow
+import net.dv8tion.jda.api.interactions.components.LayoutComponent
 
 fun buildMessage(builder: MessageBuilder.() -> Unit) = MessageBuilder().apply(builder)
 
@@ -21,7 +21,7 @@ fun buildMessage(message: MessageBuilder, builder: MessageBuilder.() -> Unit) = 
     tts = message.tts
     content = message.content
     embeds = message.embeds
-    actionRows = message.actionRows
+    components = message.components
 }.apply(builder)
 
 /**
@@ -37,7 +37,7 @@ fun buildMessage(message: Message, builder: MessageBuilder.() -> Unit) = Message
     tts = message.isTTS
     content = message.contentRaw
     embeds = message.embeds
-    actionRows = message.actionRows
+    components = message.actionRows
 }.apply(builder)
 
 @DslContext
@@ -48,7 +48,7 @@ class MessageBuilder {
     var tts: Boolean = false
     var content: String? = null
     var embeds: MutableList<MessageEmbed> = mutableListOf()
-    var actionRows: MutableList<ActionRow> = mutableListOf()
+    var components: MutableList<out LayoutComponent> = mutableListOf()
 
     /**
      * Add embed.
@@ -99,28 +99,4 @@ class MessageBuilder {
     fun addEmbed(index: Int, builder: EmbedBuilder.() -> Unit) {
         addEmbed(index, buildEmbed(builder).buildEmbed())
     }
-
-    /**
-     * Build message.
-     *
-     * @return [net.dv8tion.jda.api.MessageBuilder]
-     *
-     * @author Aoichaan0513
-     */
-    fun build() = net.dv8tion.jda.api.MessageBuilder()
-        .setAllowedMentions(allowedMentions)
-        .setNonce(nonce)
-        .setTTS(tts)
-        .setContent(content?.ifBlank { null })
-        .setEmbeds(embeds)
-        .setActionRows(actionRows)
-
-    /**
-     * Build mesage.
-     *
-     * @return [Message]
-     *
-     * @author Aoichaan0513
-     */
-    fun buildMessage() = build().build()
 }
