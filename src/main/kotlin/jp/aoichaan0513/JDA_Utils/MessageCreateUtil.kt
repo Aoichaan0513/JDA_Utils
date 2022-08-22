@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData
 
 
 fun MessageChannel.send(
-    content: CharSequence,
+    content: MessageCreateData,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageCreateAction? {
     if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
@@ -20,20 +20,19 @@ fun MessageChannel.send(
 }
 
 fun MessageChannel.send(
+    content: CharSequence,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = send(MessageCreateData.fromContent(content.toString()), allowedMentions)
+
+fun MessageChannel.send(
     content: Message,
     allowedMentions: Collection<Message.MentionType>? = setOf()
-): MessageCreateAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
-    return sendMessage(MessageCreateBuilder.fromMessage(content).build()).setAllowedMentions(allowedMentions)
-}
+) = send(MessageCreateData.fromMessage(content), allowedMentions)
 
 fun MessageChannel.send(
     content: MessageBuilder,
     allowedMentions: Collection<Message.MentionType>? = setOf()
-): MessageCreateAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
-    return sendMessage(content.buildCreateData()).setNonce(content.nonce).setAllowedMentions(allowedMentions)
-}
+) = send(content.buildCreateData(), allowedMentions)?.setNonce(content.nonce)
 
 fun MessageChannel.send(
     content: MessageEmbed,
@@ -112,7 +111,7 @@ fun MessageChannel.sendComponents(
 
 fun MessageChannel.reply(
     reference: Message,
-    content: CharSequence,
+    content: MessageCreateData,
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageCreateAction? {
@@ -122,26 +121,24 @@ fun MessageChannel.reply(
 
 fun MessageChannel.reply(
     reference: Message,
+    content: CharSequence,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = reply(reference, MessageCreateData.fromContent(content.toString()), isRepliedMention, allowedMentions)
+
+fun MessageChannel.reply(
+    reference: Message,
     content: Message,
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
-): MessageCreateAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY)) return null
-    return reference.reply(MessageCreateData.fromMessage(content)).mentionRepliedUser(isRepliedMention)
-        .setAllowedMentions(allowedMentions)
-}
-
+) = reply(reference, MessageCreateData.fromMessage(content), isRepliedMention, allowedMentions)
 
 fun MessageChannel.reply(
     reference: Message,
     content: MessageBuilder,
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
-): MessageCreateAction? {
-    if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY)) return null
-    return reference.reply(content.buildCreateData()).setNonce(content.nonce).mentionRepliedUser(isRepliedMention)
-        .setAllowedMentions(allowedMentions)
-}
+) = reply(reference, content.buildCreateData(), isRepliedMention, allowedMentions)?.setNonce(content.nonce)
 
 fun MessageChannel.reply(
     reference: Message,

@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.utils.messages.MessageEditData
 
 
 fun Message.edit(
-    content: CharSequence,
+    content: MessageEditData,
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageEditAction? {
@@ -18,23 +18,22 @@ fun Message.edit(
 }
 
 fun Message.edit(
+    content: CharSequence,
+    isRepliedMention: Boolean = false,
+    allowedMentions: Collection<Message.MentionType>? = setOf()
+) = edit(MessageEditData.fromContent(content.toString()), isRepliedMention, allowedMentions)
+
+fun Message.edit(
     content: Message,
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
-): MessageEditAction? {
-    if (!channel.hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
-    return editMessage(MessageEditData.fromMessage(content)).mentionRepliedUser(isRepliedMention)
-        .setAllowedMentions(allowedMentions)
-}
+) = edit(MessageEditData.fromMessage(content), isRepliedMention, allowedMentions)
 
 fun Message.edit(
     content: MessageBuilder,
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
-): MessageEditAction? {
-    if (!channel.hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
-    return editMessage(content.buildEditData()).mentionRepliedUser(isRepliedMention).setAllowedMentions(allowedMentions)
-}
+) = edit(content.buildEditData(), isRepliedMention, allowedMentions)
 
 fun Message.edit(
     content: MessageEmbed,
