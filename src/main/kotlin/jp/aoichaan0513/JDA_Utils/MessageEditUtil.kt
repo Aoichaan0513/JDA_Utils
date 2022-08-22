@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction
-import net.dv8tion.jda.api.utils.messages.MessageEditBuilder
 import net.dv8tion.jda.api.utils.messages.MessageEditData
 
 
@@ -34,14 +33,7 @@ fun Message.edit(
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageEditAction? {
     if (!channel.hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
-    return editMessage(
-        MessageEditBuilder()
-            .setAllowedMentions(content.allowedMentions)
-            .setContent(content.content?.ifBlank { null })
-            .setEmbeds(content.embeds)
-            .setComponents(content.components)
-            .build()
-    ).mentionRepliedUser(isRepliedMention).setAllowedMentions(allowedMentions)
+    return editMessage(content.buildEditData()).mentionRepliedUser(isRepliedMention).setAllowedMentions(allowedMentions)
 }
 
 fun Message.edit(

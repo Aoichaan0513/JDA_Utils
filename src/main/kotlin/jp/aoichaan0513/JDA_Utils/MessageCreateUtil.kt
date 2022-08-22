@@ -32,15 +32,7 @@ fun MessageChannel.send(
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageCreateAction? {
     if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return null
-    return sendMessage(
-        MessageCreateBuilder()
-            .setAllowedMentions(content.allowedMentions)
-            .setTTS(content.tts)
-            .setContent(content.content?.ifBlank { null })
-            .setEmbeds(content.embeds)
-            .setComponents(content.components)
-            .build()
-    ).setNonce(content.nonce).setAllowedMentions(allowedMentions)
+    return sendMessage(content.buildCreateData()).setNonce(content.nonce).setAllowedMentions(allowedMentions)
 }
 
 fun MessageChannel.send(
@@ -147,15 +139,8 @@ fun MessageChannel.reply(
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ): MessageCreateAction? {
     if (!hasPermissionsByMember(Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY)) return null
-    return reference.reply(
-        MessageCreateBuilder()
-            .setAllowedMentions(content.allowedMentions)
-            .setTTS(content.tts)
-            .setContent(content.content?.ifBlank { null })
-            .setEmbeds(content.embeds)
-            .setComponents(content.components)
-            .build()
-    ).setNonce(content.nonce).mentionRepliedUser(isRepliedMention).setAllowedMentions(allowedMentions)
+    return reference.reply(content.buildCreateData()).setNonce(content.nonce).mentionRepliedUser(isRepliedMention)
+        .setAllowedMentions(allowedMentions)
 }
 
 fun MessageChannel.reply(

@@ -80,7 +80,7 @@ class EmbedBuilder {
         var DEFAULT_COLOR = 0x1FFFFFFF
     }
 
-    var color: Int = DEFAULT_COLOR
+    var color = DEFAULT_COLOR
     var author: Author? = null
     var title: String? = null
     var url: String? = null

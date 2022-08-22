@@ -4,6 +4,8 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.Message.MentionType
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.interactions.components.LayoutComponent
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder
 
 fun buildMessage(builder: MessageBuilder.() -> Unit) = MessageBuilder().apply(builder)
 
@@ -43,11 +45,11 @@ fun buildMessage(message: Message, builder: MessageBuilder.() -> Unit) = Message
 @DslContext
 class MessageBuilder {
 
-    var allowedMentions: MutableSet<MentionType> = mutableSetOf()
+    var allowedMentions = mutableSetOf<MentionType>()
     var nonce: String? = null
-    var tts: Boolean = false
+    var tts = false
     var content: String? = null
-    var embeds: MutableList<MessageEmbed> = mutableListOf()
+    var embeds = mutableListOf<MessageEmbed>()
     var components: MutableList<out LayoutComponent> = mutableListOf()
 
     /**
@@ -99,4 +101,34 @@ class MessageBuilder {
     fun addEmbed(index: Int, builder: EmbedBuilder.() -> Unit) {
         addEmbed(index, buildEmbed(builder).buildEmbed())
     }
+
+    /**
+     * Build Create Data.
+     *
+     * @return [net.dv8tion.jda.api.utils.messages.MessageCreateData]
+     *
+     * @author Aoichaan0513
+     */
+    fun buildCreateData() = MessageCreateBuilder()
+        .setAllowedMentions(allowedMentions)
+        .setTTS(tts)
+        .setContent(content?.ifBlank { null })
+        .setEmbeds(embeds)
+        .setComponents(components)
+        .build()
+
+    /**
+     * Build Edit Data.
+     *
+     * @return [net.dv8tion.jda.api.utils.messages.MessageEditData]
+     *
+     * @author Aoichaan0513
+     */
+    fun buildEditData(replace: Boolean = false) = MessageEditBuilder()
+        .setReplace(replace)
+        .setAllowedMentions(allowedMentions)
+        .setContent(content?.ifBlank { null })
+        .setEmbeds(embeds)
+        .setComponents(components)
+        .build()
 }
