@@ -39,7 +39,7 @@ fun buildMessage(message: Message, builder: MessageBuilder.() -> Unit) = Message
     tts = message.isTTS
     content = message.contentRaw
     embeds = message.embeds
-    components = message.actionRows
+    components = message.actionRows.toMutableList()
 }.apply(builder)
 
 @DslContext
@@ -50,7 +50,7 @@ class MessageBuilder {
     var tts = false
     var content: String? = null
     var embeds = mutableListOf<MessageEmbed>()
-    var components: MutableList<out LayoutComponent> = mutableListOf()
+    var components = mutableListOf<LayoutComponent>()
 
     /**
      * Add embed.
@@ -100,6 +100,31 @@ class MessageBuilder {
     @DslContext
     fun addEmbed(index: Int, builder: EmbedBuilder.() -> Unit) {
         addEmbed(index, buildEmbed(builder).buildEmbed())
+    }
+
+    /**
+     * Add Layout component.
+     *
+     * @param component [LayoutComponent] object
+     *
+     * @author Aoichaan0513
+     */
+    @DslContext
+    fun addComponent(component: LayoutComponent) {
+        components.add(component)
+    }
+
+    /**
+     * Add Layout component.
+     *
+     * @param index Index number
+     * @param component [LayoutComponent] object
+     *
+     * @author Aoichaan0513
+     */
+    @DslContext
+    fun addComponent(index: Int, component: LayoutComponent) {
+        components.add(index, component)
     }
 
     /**
