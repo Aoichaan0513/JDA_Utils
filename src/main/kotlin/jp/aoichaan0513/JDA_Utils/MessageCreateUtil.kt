@@ -73,7 +73,7 @@ fun MessageChannel.sendComponents(
     content: MessageCreateData,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true,
-    action: (MessageCreateAction) -> Unit
+    action: (MessageCreateAction) -> Unit = { it.queue() }
 ) {
     if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return
 
@@ -114,7 +114,7 @@ fun MessageChannel.sendComponents(
     content: CharSequence,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true,
-    action: (MessageCreateAction) -> Unit
+    action: (MessageCreateAction) -> Unit = { it.queue() }
 ) = sendComponents(
     MessageCreateData.fromContent(content.toString()),
     allowedMentions,
@@ -126,7 +126,7 @@ fun MessageChannel.sendComponents(
     content: Message,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true,
-    action: (MessageCreateAction) -> Unit
+    action: (MessageCreateAction) -> Unit = { it.queue() }
 ) = sendComponents(
     MessageCreateData.fromMessage(content),
     allowedMentions,
@@ -216,7 +216,7 @@ fun MessageChannel.replyComponents(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true,
-    action: (MessageCreateAction) -> Unit
+    action: (MessageCreateAction) -> Unit = { it.queue() }
 ) {
     if (!hasPermissionsByMember(Permission.MESSAGE_SEND)) return
 
@@ -260,7 +260,7 @@ fun MessageChannel.replyComponents(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true,
-    action: (MessageCreateAction) -> Unit
+    action: (MessageCreateAction) -> Unit = { it.queue() }
 ) = replyComponents(
     reference,
     MessageCreateData.fromContent(content.toString()),
@@ -276,7 +276,7 @@ fun MessageChannel.replyComponents(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf(),
     isEmbedToText: Boolean = true,
-    action: (MessageCreateAction) -> Unit
+    action: (MessageCreateAction) -> Unit = { it.queue() }
 ) = replyComponents(
     reference,
     MessageCreateData.fromMessage(content),
