@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction
 import net.dv8tion.jda.api.utils.SplitUtil
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import net.dv8tion.jda.api.utils.messages.MessageCreateData
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder
+import net.dv8tion.jda.api.utils.messages.MessageEditData
 
 
 fun MessageChannel.send(
@@ -285,3 +287,11 @@ fun MessageChannel.replyComponents(
     isEmbedToText,
     action
 )
+
+
+fun MessageCreateBuilder.toEditBuilder() = MessageEditBuilder.fromCreateData(this.build())
+fun MessageCreateData.toEditData() = MessageEditData.fromCreateData(this)
+
+
+fun MessageEditBuilder.toEditBuilder() = MessageCreateBuilder.fromEdit(this.build())
+fun MessageEditData.toEditData() = MessageCreateData.fromEditData(this)
