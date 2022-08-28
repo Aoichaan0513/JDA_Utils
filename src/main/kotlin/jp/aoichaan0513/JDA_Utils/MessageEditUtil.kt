@@ -1,10 +1,16 @@
 package jp.aoichaan0513.JDA_Utils
 
+import club.minnced.discord.webhook.send.AllowedMentions
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder
+import club.minnced.discord.webhook.send.WebhookMessageBuilder
 import jp.aoichaan0513.JDA_Utils.Commons.MessageBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
+import net.dv8tion.jda.api.utils.messages.MessageCreateData
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder
 import net.dv8tion.jda.api.utils.messages.MessageEditData
 
 
@@ -73,3 +79,26 @@ fun Message.editEmbeds(
     isRepliedMention: Boolean = false,
     allowedMentions: Collection<Message.MentionType>? = setOf()
 ) = editEmbeds(embeds.toList(), isRepliedMention, allowedMentions)
+
+
+fun MessageEditBuilder.toEditBuilder() = MessageCreateBuilder.fromEdit(this.build())
+fun MessageEditData.toEditData() = MessageCreateData.fromEditData(this)
+
+
+fun MessageEditData.toWebhookMessageBuilder(): WebhookMessageBuilder {
+    val builder = WebhookMessageBuilder()
+    builder.setContent(content)
+    files.forEach { builder.addFile(it.name, it.data) }
+    embeds.forEach { builder.addEmbeds(WebhookEmbedBuilder.fromJDA(it).build()) }
+
+    val allowedMentions = AllowedMentions.none()
+    val parse = this.allowedMentions
+    allowedMentions.withUsers(mentionedUsers)
+    allowedMentions.withRoles(mentionedRoles)
+    allowedMentions.withParseUsers(parse.contains(Message.MentionType.USER))
+    allowedMentions.withParseRoles(parse.contains(Message.MentionType.ROLE))
+    allowedMentions.withParseEveryone(parse.contains(Message.MentionType.EVERYONE) || parse.contains(Message.MentionType.HERE))
+    builder.setAllowedMentions(allowedMentions)
+
+    return builder
+}

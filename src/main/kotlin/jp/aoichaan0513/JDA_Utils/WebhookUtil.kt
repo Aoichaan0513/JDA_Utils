@@ -2,15 +2,10 @@ package jp.aoichaan0513.JDA_Utils
 
 import club.minnced.discord.webhook.WebhookClientBuilder
 import club.minnced.discord.webhook.receive.ReadonlyMessage
-import club.minnced.discord.webhook.send.AllowedMentions
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder
-import club.minnced.discord.webhook.send.WebhookMessageBuilder
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.Message.MentionType
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.Webhook
-import net.dv8tion.jda.api.utils.messages.MessageCreateData
-import net.dv8tion.jda.api.utils.messages.MessageEditData
 
 
 fun Webhook.send(content: String): ReadonlyMessage {
@@ -92,41 +87,3 @@ fun Webhook.edit(readonlyMessage: ReadonlyMessage, vararg embed: MessageEmbed) =
     edit(readonlyMessage.id, embed.toList())
 
 fun Webhook.edit(id: Long, vararg embed: MessageEmbed) = edit(id, embed.toList())
-
-
-fun WebhookMessageBuilder.fromJDA(data: MessageCreateData): WebhookMessageBuilder {
-    val builder = WebhookMessageBuilder()
-    builder.setTTS(data.isTTS)
-    builder.setContent(data.content)
-    data.files.forEach { builder.addFile(it.name, it.data) }
-    data.embeds.forEach { builder.addEmbeds(WebhookEmbedBuilder.fromJDA(it).build()) }
-
-    val allowedMentions = AllowedMentions.none()
-    val parse = data.allowedMentions
-    allowedMentions.withUsers(data.mentionedUsers)
-    allowedMentions.withRoles(data.mentionedRoles)
-    allowedMentions.withParseUsers(parse.contains(MentionType.USER))
-    allowedMentions.withParseRoles(parse.contains(MentionType.ROLE))
-    allowedMentions.withParseEveryone(parse.contains(MentionType.EVERYONE) || parse.contains(MentionType.HERE))
-    builder.setAllowedMentions(allowedMentions)
-
-    return builder
-}
-
-fun WebhookMessageBuilder.fromJDA(data: MessageEditData): WebhookMessageBuilder {
-    val builder = WebhookMessageBuilder()
-    builder.setContent(data.content)
-    data.files.forEach { builder.addFile(it.name, it.data) }
-    data.embeds.forEach { builder.addEmbeds(WebhookEmbedBuilder.fromJDA(it).build()) }
-
-    val allowedMentions = AllowedMentions.none()
-    val parse = data.allowedMentions
-    allowedMentions.withUsers(data.mentionedUsers)
-    allowedMentions.withRoles(data.mentionedRoles)
-    allowedMentions.withParseUsers(parse.contains(MentionType.USER))
-    allowedMentions.withParseRoles(parse.contains(MentionType.ROLE))
-    allowedMentions.withParseEveryone(parse.contains(MentionType.EVERYONE) || parse.contains(MentionType.HERE))
-    builder.setAllowedMentions(allowedMentions)
-
-    return builder
-}
