@@ -81,8 +81,8 @@ fun Message.editEmbeds(
 ) = editEmbeds(embeds.toList(), isRepliedMention, allowedMentions)
 
 
-fun MessageEditBuilder.toEditBuilder() = MessageCreateBuilder.fromEdit(this.build())
-fun MessageEditData.toEditData() = MessageCreateData.fromEditData(this)
+fun MessageEditBuilder.toCreateBuilder() = MessageCreateBuilder.fromEdit(this.build())
+fun MessageEditData.toCreateData() = MessageCreateData.fromEditData(this)
 
 
 fun MessageEditData.toWebhookMessageBuilder(): WebhookMessageBuilder {
