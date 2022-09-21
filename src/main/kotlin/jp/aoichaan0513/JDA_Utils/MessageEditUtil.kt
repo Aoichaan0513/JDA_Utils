@@ -81,7 +81,7 @@ fun Message.editEmbeds(
 ) = editEmbeds(embeds.toList(), isRepliedMention, allowedMentions)
 
 
-fun MessageEditBuilder.toCreateBuilder() = MessageCreateBuilder.fromEdit(this.build())
+fun MessageEditBuilder.toCreateBuilder() = MessageCreateBuilder.fromEditData(this.build())
 fun MessageEditData.toCreateData() = MessageCreateData.fromEditData(this)
 
 

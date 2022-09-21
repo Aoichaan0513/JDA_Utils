@@ -6,8 +6,8 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder
 import jp.aoichaan0513.JDA_Utils.Commons.MessageBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
-import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction
 import net.dv8tion.jda.api.utils.SplitUtil
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
