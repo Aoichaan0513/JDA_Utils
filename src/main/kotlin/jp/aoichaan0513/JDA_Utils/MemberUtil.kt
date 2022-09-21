@@ -16,20 +16,11 @@ val Member.name
 val Member.discriminator
     get() = user.discriminator
 
-val Member.avatarId
-    get() = user.avatarId
-
-val Member.avatarUrl
-    get() = user.avatarUrl
-
 val Member.defaultAvatarId
     get() = user.defaultAvatarId
 
 val Member.defaultAvatarUrl
     get() = user.defaultAvatarUrl
-
-val Member.effectiveAvatarUrl
-    get() = user.effectiveAvatarUrl
 
 val Member?.tag: String
     get() = getTag()

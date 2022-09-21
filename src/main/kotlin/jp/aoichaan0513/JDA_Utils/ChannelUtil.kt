@@ -61,35 +61,41 @@ fun Channel.hasAccessByRole(role: Role? = null) =
     this !is GuildChannel || (role ?: guild.publicRole).hasAccess(this)
 
 
-private fun Channel.hasPermissions(permissions: Collection<Permission?>, holder: IPermissionHolder) =
-    this !is GuildChannel || holder.hasPermission(this, permissions.filterNotNull())
+private fun GuildChannel.hasPermissions(holder: IPermissionHolder, permissions: Collection<Permission?>) =
+    holder.hasPermission(this, permissions.filterNotNull())
 
-private fun Channel.hasPermissions(iterable: Iterable<Permission?>, holder: IPermissionHolder) =
-    hasPermissions(iterable.toSet(), holder)
+fun Channel.hasPermissionsByMember(member: Member, permissions: Collection<Permission?>) =
+    this !is GuildChannel || hasPermissions(member, permissions)
 
-private fun Channel.hasPermissions(vararg array: Permission?, holder: IPermissionHolder) =
-    hasPermissions(array.toSet(), holder)
+fun Channel.hasPermissionsByMember(member: Member, iterable: Iterable<Permission?>) =
+    hasPermissionsByMember(member, iterable.toSet())
 
-fun Channel.hasPermissionsByMember(permissions: Collection<Permission?>, member: Member? = null) =
-    this !is GuildChannel || hasPermissions(
-        permissions,
-        (member ?: guild.selfMember) as IPermissionHolder
-    )
+fun Channel.hasPermissionsByMember(member: Member, vararg array: Permission?) =
+    hasPermissionsByMember(member, array.toSet())
 
-fun Channel.hasPermissionsByMember(iterable: Iterable<Permission?>, member: Member? = null) =
-    hasPermissionsByMember(iterable.toSet(), member)
+fun Channel.hasPermissionsByMember(permissions: Collection<Permission?>) =
+    this !is GuildChannel || hasPermissions(guild.selfMember, permissions)
 
-fun Channel.hasPermissionsByMember(vararg array: Permission?, member: Member? = null) =
-    hasPermissionsByMember(array.toSet(), member)
+fun Channel.hasPermissionsByMember(iterable: Iterable<Permission?>) =
+    hasPermissionsByMember(iterable.toSet())
 
-fun Channel.hasPermissionsByRole(permissions: Collection<Permission?>, role: Role? = null) =
-    this !is GuildChannel || hasPermissions(
-        permissions,
-        (role ?: guild.publicRole) as IPermissionHolder
-    )
+fun Channel.hasPermissionsByMember(vararg array: Permission?) =
+    hasPermissionsByMember(array.toSet())
 
-fun Channel.hasPermissionsByRole(iterable: Iterable<Permission?>, role: Role? = null) =
-    hasPermissionsByRole(iterable.toSet(), role)
+fun Channel.hasPermissionsByRole(role: Role, permissions: Collection<Permission?>) =
+    this !is GuildChannel || hasPermissions(role, permissions)
 
-fun Channel.hasPermissionsByRole(vararg array: Permission?, role: Role? = null) =
-    hasPermissionsByRole(array.toSet(), role)
+fun Channel.hasPermissionsByRole(role: Role, iterable: Iterable<Permission?>) =
+    hasPermissionsByRole(role, iterable.toSet())
+
+fun Channel.hasPermissionsByRole(role: Role, vararg array: Permission?) =
+    hasPermissionsByRole(role, array.toSet())
+
+fun Channel.hasPermissionsByRole(permissions: Collection<Permission?>) =
+    this !is GuildChannel || hasPermissions(guild.publicRole, permissions)
+
+fun Channel.hasPermissionsByRole(iterable: Iterable<Permission?>) =
+    hasPermissionsByRole(iterable.toSet())
+
+fun Channel.hasPermissionsByRole(vararg array: Permission?) =
+    hasPermissionsByRole(array.toSet())
