@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "jp.aoichaan0513"
-version = "2.0.0-beta.18"
+version = "2.0.0-beta.19"
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ dependencies {
     implementation(kotlin("script-util", kotlinVersion))
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4")
 
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.18")
+    implementation("net.dv8tion", "JDA", "5.0.0-alpha.19")
     implementation("club.minnced", "discord-webhooks", "0.8.2")
     implementation("joda-time", "joda-time", "2.10.14")
     implementation("org.ocpsoft.prettytime", "prettytime", "5.0.3.Final")
