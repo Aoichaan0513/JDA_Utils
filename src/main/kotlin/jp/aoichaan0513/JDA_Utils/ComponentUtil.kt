@@ -7,15 +7,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.entities.channel.ChannelType
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
+import net.dv8tion.jda.api.interactions.components.selections.EntitySelectMenu
+import net.dv8tion.jda.api.interactions.components.selections.EntitySelectMenu.SelectTarget
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
 import net.dv8tion.jda.api.sharding.ShardManager
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
@@ -46,14 +50,24 @@ inline fun ShardManager.onButton(
     crossinline consumer: ComponentEventListener.(ButtonInteractionEvent) -> Unit
 ) = onComponent(id, consumer)
 
-inline fun JDA.onSelectMenu(
+inline fun JDA.onStringSelectMenu(
     id: String,
-    crossinline consumer: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
+    crossinline consumer: ComponentEventListener.(StringSelectInteractionEvent) -> Unit
 ) = onComponent(id, consumer)
 
-inline fun ShardManager.onSelectMenu(
+inline fun ShardManager.onStringSelectMenu(
     id: String,
-    crossinline consumer: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
+    crossinline consumer: ComponentEventListener.(StringSelectInteractionEvent) -> Unit
+) = onComponent(id, consumer)
+
+inline fun JDA.onEntitySelectMenu(
+    id: String,
+    crossinline consumer: ComponentEventListener.(EntitySelectInteractionEvent) -> Unit
+) = onComponent(id, consumer)
+
+inline fun ShardManager.onEntitySelectMenu(
+    id: String,
+    crossinline consumer: ComponentEventListener.(EntitySelectInteractionEvent) -> Unit
 ) = onComponent(id, consumer)
 
 inline fun JDA.onModal(
@@ -134,23 +148,23 @@ suspend inline fun ShardManager.button(
 
 
 @OptIn(DelicateCoroutinesApi::class)
-suspend inline fun JDA.selectMenu(
+suspend inline fun JDA.stringSelectMenu(
     options: Collection<SelectOption> = emptyList(),
     placeholder: String? = null,
     minValue: Int = 1,
     maxValue: Int = 1,
     expiration: Long = TimeUnit.MINUTES.toMillis(15),
     user: User? = null,
-    crossinline listener: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
-): SelectMenu {
+    crossinline listener: ComponentEventListener.(StringSelectInteractionEvent) -> Unit
+): StringSelectMenu {
     val id = ThreadLocalRandom.current().nextLong().toString()
-    val selectMenu = SelectMenu.create(id).apply {
+    val selectMenu = StringSelectMenu.create(id).apply {
         addOptions(options)
         this.placeholder = placeholder
         setRequiredRange(minValue, maxValue)
     }.build()
 
-    val task = onSelectMenu(id) {
+    val task = onStringSelectMenu(id) {
         if (user == null || user == it.user)
             listener(it)
 
@@ -168,59 +182,34 @@ suspend inline fun JDA.selectMenu(
     return selectMenu
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-suspend inline fun JDA.selectMenu(
+suspend inline fun JDA.stringSelectMenu(
     options: Array<SelectOption> = emptyArray(),
     placeholder: String? = null,
     minValue: Int = 1,
     maxValue: Int = 1,
     expiration: Long = TimeUnit.MINUTES.toMillis(15),
     user: User? = null,
-    crossinline listener: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
-): SelectMenu {
-    val id = ThreadLocalRandom.current().nextLong().toString()
-    val selectMenu = SelectMenu.create(id).apply {
-        addOptions(*options)
-        this.placeholder = placeholder
-        setRequiredRange(minValue, maxValue)
-    }.build()
-
-    val task = onSelectMenu(id) {
-        if (user == null || user == it.user)
-            listener(it)
-
-        if (!it.isAcknowledged)
-            it.deferEdit().queue()
-    }
-
-    if (expiration > 0) {
-        GlobalScope.launch {
-            delay(expiration)
-            removeEventListener(task)
-        }
-    }
-
-    return selectMenu
-}
+    crossinline listener: ComponentEventListener.(StringSelectInteractionEvent) -> Unit
+) = stringSelectMenu(options.toList(), placeholder, minValue, maxValue, expiration, user, listener)
 
 @OptIn(DelicateCoroutinesApi::class)
-suspend inline fun ShardManager.selectMenu(
+suspend inline fun ShardManager.stringSelectMenu(
     options: Collection<SelectOption> = emptyList(),
     placeholder: String? = null,
     minValue: Int = 1,
     maxValue: Int = 1,
     expiration: Long = TimeUnit.MINUTES.toMillis(15),
     user: User? = null,
-    crossinline listener: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
-): SelectMenu {
+    crossinline listener: ComponentEventListener.(StringSelectInteractionEvent) -> Unit
+): StringSelectMenu {
     val id = ThreadLocalRandom.current().nextLong().toString()
-    val selectMenu = SelectMenu.create(id).apply {
+    val selectMenu = StringSelectMenu.create(id).apply {
         addOptions(options)
         this.placeholder = placeholder
         setRequiredRange(minValue, maxValue)
     }.build()
 
-    val task = onSelectMenu(id) {
+    val task = onStringSelectMenu(id) {
         if (user == null || user == it.user)
             listener(it)
 
@@ -238,24 +227,36 @@ suspend inline fun ShardManager.selectMenu(
     return selectMenu
 }
 
-@OptIn(DelicateCoroutinesApi::class)
-suspend inline fun ShardManager.selectMenu(
+suspend inline fun ShardManager.stringSelectMenu(
     options: Array<SelectOption> = emptyArray(),
     placeholder: String? = null,
     minValue: Int = 1,
     maxValue: Int = 1,
     expiration: Long = TimeUnit.MINUTES.toMillis(15),
     user: User? = null,
-    crossinline listener: ComponentEventListener.(SelectMenuInteractionEvent) -> Unit
-): SelectMenu {
+    crossinline listener: ComponentEventListener.(StringSelectInteractionEvent) -> Unit
+) = stringSelectMenu(options.toList(), placeholder, minValue, maxValue, expiration, user, listener)
+
+
+@OptIn(DelicateCoroutinesApi::class)
+suspend inline fun JDA.entitySelectMenu(
+    targets: Collection<SelectTarget> = emptyList(),
+    types: Collection<ChannelType> = emptyList(),
+    placeholder: String? = null,
+    minValue: Int = 1,
+    maxValue: Int = 1,
+    expiration: Long = TimeUnit.MINUTES.toMillis(15),
+    user: User? = null,
+    crossinline listener: ComponentEventListener.(EntitySelectInteractionEvent) -> Unit
+): EntitySelectMenu {
     val id = ThreadLocalRandom.current().nextLong().toString()
-    val selectMenu = SelectMenu.create(id).apply {
-        addOptions(*options)
+    val selectMenu = EntitySelectMenu.create(id, targets).apply {
+        setChannelTypes(types)
         this.placeholder = placeholder
         setRequiredRange(minValue, maxValue)
     }.build()
 
-    val task = onSelectMenu(id) {
+    val task = onEntitySelectMenu(id) {
         if (user == null || user == it.user)
             listener(it)
 
@@ -272,3 +273,61 @@ suspend inline fun ShardManager.selectMenu(
 
     return selectMenu
 }
+
+suspend inline fun JDA.entitySelectMenu(
+    targets: Array<SelectTarget> = emptyArray(),
+    types: Array<ChannelType> = emptyArray(),
+    placeholder: String? = null,
+    minValue: Int = 1,
+    maxValue: Int = 1,
+    expiration: Long = TimeUnit.MINUTES.toMillis(15),
+    user: User? = null,
+    crossinline listener: ComponentEventListener.(EntitySelectInteractionEvent) -> Unit
+) = entitySelectMenu(targets.toList(), types.toList(), placeholder, minValue, maxValue, expiration, user, listener)
+
+@OptIn(DelicateCoroutinesApi::class)
+suspend inline fun ShardManager.entitySelectMenu(
+    targets: Collection<SelectTarget> = emptyList(),
+    types: Collection<ChannelType> = emptyList(),
+    placeholder: String? = null,
+    minValue: Int = 1,
+    maxValue: Int = 1,
+    expiration: Long = TimeUnit.MINUTES.toMillis(15),
+    user: User? = null,
+    crossinline listener: ComponentEventListener.(EntitySelectInteractionEvent) -> Unit
+): EntitySelectMenu {
+    val id = ThreadLocalRandom.current().nextLong().toString()
+    val selectMenu = EntitySelectMenu.create(id, targets).apply {
+        setChannelTypes(types)
+        this.placeholder = placeholder
+        setRequiredRange(minValue, maxValue)
+    }.build()
+
+    val task = onEntitySelectMenu(id) {
+        if (user == null || user == it.user)
+            listener(it)
+
+        if (!it.isAcknowledged)
+            it.deferEdit().queue()
+    }
+
+    if (expiration > 0) {
+        GlobalScope.launch {
+            delay(expiration)
+            removeEventListener(task)
+        }
+    }
+
+    return selectMenu
+}
+
+suspend inline fun ShardManager.entitySelectMenu(
+    targets: Array<SelectTarget> = emptyArray(),
+    types: Array<ChannelType> = emptyArray(),
+    placeholder: String? = null,
+    minValue: Int = 1,
+    maxValue: Int = 1,
+    expiration: Long = TimeUnit.MINUTES.toMillis(15),
+    user: User? = null,
+    crossinline listener: ComponentEventListener.(EntitySelectInteractionEvent) -> Unit
+) = entitySelectMenu(targets.toList(), types.toList(), placeholder, minValue, maxValue, expiration, user, listener)

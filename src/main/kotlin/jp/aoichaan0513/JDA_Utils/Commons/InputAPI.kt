@@ -1,9 +1,9 @@
 package jp.aoichaan0513.JDA_Utils.Commons
 
 import net.dv8tion.jda.api.events.GenericEvent
-import net.dv8tion.jda.api.events.ShutdownEvent
 import net.dv8tion.jda.api.events.message.GenericMessageEvent
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
+import net.dv8tion.jda.api.events.session.ShutdownEvent
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.sharding.ShardManager
 import java.util.concurrent.Executors
