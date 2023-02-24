@@ -14,9 +14,8 @@ repositories {
     mavenCentral()
     jcenter()
 
-    // maven("https://m2.dv8tion.net/releases")
     maven("https://jitpack.io/")
-    maven("https://repository.aoichaan0513.jp")
+    maven("https://raw.githubusercontent.com/Aoichaan0513/repository/main")
 }
 
 dependencies {
@@ -24,11 +23,11 @@ dependencies {
     implementation(kotlin("script-util", kotlinVersion))
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4")
 
-    implementation("net.dv8tion", "JDA", "5.0.0-alpha.22")
+    implementation("net.dv8tion", "JDA", "5.0.0-beta.4")
     implementation("club.minnced", "discord-webhooks", "0.8.2")
-    implementation("joda-time", "joda-time", "2.11.1")
-    implementation("org.ocpsoft.prettytime", "prettytime", "5.0.4.Final")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.5.3")
+    implementation("joda-time", "joda-time", "2.12.2")
+    implementation("org.ocpsoft.prettytime", "prettytime", "5.0.6.Final")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.6.0")
 }
 
 java {
