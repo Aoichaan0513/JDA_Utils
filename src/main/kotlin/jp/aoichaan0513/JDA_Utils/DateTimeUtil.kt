@@ -84,6 +84,6 @@ fun ZonedDateTime.getFormattedTimestamp(
 
 object DateTimeUtil {
 
-    val DEFAULT_ZONE_ID = jp.aoichaan0513.Kotlin_Utils.DateTimeUtil.DEFAULT_ZONE_ID
+    val DEFAULT_ZONE_ID: ZoneId = jp.aoichaan0513.Kotlin_Utils.DateTimeUtil.DEFAULT_ZONE_ID
     var DEFAULT_PATTERN = jp.aoichaan0513.Kotlin_Utils.DateTimeUtil.DEFAULT_PATTERN
 }

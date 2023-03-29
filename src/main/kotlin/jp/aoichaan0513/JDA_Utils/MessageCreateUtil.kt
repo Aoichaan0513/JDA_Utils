@@ -95,16 +95,17 @@ fun MessageChannel.sendComponents(
                 val builder = MessageCreateBuilder.from(content)
                 builder.setEmbeds(setOf())
                 content.embeds.forEach {
-                    builder.addContent("${ZERO_WIDTH_SPACE}${it.toText()}")
+                    builder.addContent("${StringUtil.ZERO_WIDTH_SPACE}${it.toText()}")
                 }
 
                 SplitUtil.split(
                     builder.content,
                     2000,
                     true,
-                    SplitUtil.Strategy.onChar(ZERO_WIDTH_SPACE),
+                    SplitUtil.Strategy.onChar(StringUtil.ZERO_WIDTH_SPACE),
                     SplitUtil.Strategy.ANYWHERE
-                ).mapNotNull { setAction(sendMessage(it.removePrefix(ZERO_WIDTH_SPACE.toString()))) }.forEach(action)
+                ).mapNotNull { setAction(sendMessage(it.removePrefix(StringUtil.ZERO_WIDTH_SPACE.toString()))) }
+                    .forEach(action)
                 return
             }
         } else {
@@ -239,16 +240,17 @@ fun MessageChannel.replyComponents(
                 val builder = MessageCreateBuilder.from(content)
                 builder.setEmbeds(setOf())
                 content.embeds.forEach {
-                    builder.addContent("${ZERO_WIDTH_SPACE}${it.toText()}")
+                    builder.addContent("${StringUtil.ZERO_WIDTH_SPACE}${it.toText()}")
                 }
 
                 SplitUtil.split(
                     builder.content,
                     2000,
                     true,
-                    SplitUtil.Strategy.onChar(ZERO_WIDTH_SPACE),
+                    SplitUtil.Strategy.onChar(StringUtil.ZERO_WIDTH_SPACE),
                     SplitUtil.Strategy.ANYWHERE
-                ).mapNotNull { setAction(sendMessage(it.removePrefix(ZERO_WIDTH_SPACE.toString()))) }.forEach(action)
+                ).mapNotNull { setAction(sendMessage(it.removePrefix(StringUtil.ZERO_WIDTH_SPACE.toString()))) }
+                    .forEach(action)
                 return
             }
         } else {

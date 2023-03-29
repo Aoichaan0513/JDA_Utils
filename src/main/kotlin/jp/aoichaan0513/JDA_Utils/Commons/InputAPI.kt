@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.session.ShutdownEvent
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.sharding.ShardManager
 import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
@@ -18,10 +19,8 @@ abstract class InputAPI(
     var timeOutAction: Runnable = Runnable { }
 ) : EventListener {
 
-    val scheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+    val scheduledExecutorService: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     var scheduledFuture: ScheduledFuture<*>? = null
-
-    private val instance = this
 
     var isAddedEventListener = false
         private set
@@ -35,20 +34,20 @@ abstract class InputAPI(
         if (scheduledExecutorService.isShutdown || timeOut < 1) return
 
         if (!isAddedEventListener) {
-            shardManager.addEventListener(instance)
+            shardManager.addEventListener(this)
             isAddedEventListener = true
         }
 
         scheduledFuture?.cancel(true)
         scheduledFuture = scheduledExecutorService.schedule({
-            shardManager.removeEventListener(instance)
+            shardManager.removeEventListener(this)
             timeOutAction.run()
         }, timeOut, timeUnit)
     }
 
     open fun stop() {
         if (isAddedEventListener) {
-            shardManager.removeEventListener(instance)
+            shardManager.removeEventListener(this)
             isAddedEventListener = false
         }
 
@@ -57,7 +56,7 @@ abstract class InputAPI(
 
     open fun stopNow() {
         if (isAddedEventListener) {
-            shardManager.removeEventListener(instance)
+            shardManager.removeEventListener(this)
             isAddedEventListener = false
         }
 
@@ -68,11 +67,10 @@ abstract class InputAPI(
     abstract fun onMessageReactionEvent(e: GenericMessageReactionEvent)
 
     override fun onEvent(e: GenericEvent) {
-        if (e is GenericMessageReactionEvent)
-            onMessageReactionEvent(e)
-        else if (e is GenericMessageEvent)
-            onMessageEvent(e)
-        else if (e is ShutdownEvent)
-            stop()
+        when (e) {
+            is GenericMessageReactionEvent -> onMessageReactionEvent(e)
+            is GenericMessageEvent -> onMessageEvent(e)
+            is ShutdownEvent -> stop()
+        }
     }
 }

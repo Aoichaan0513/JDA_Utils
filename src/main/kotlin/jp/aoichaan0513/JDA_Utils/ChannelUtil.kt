@@ -9,12 +9,8 @@ import net.dv8tion.jda.api.entities.channel.ChannelType
 import net.dv8tion.jda.api.entities.channel.attribute.ICategorizableChannel
 import net.dv8tion.jda.api.entities.channel.attribute.IPositionableChannel
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
-import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
-
-val ZERO_WIDTH_SPACE = '\u200E'
 
 
 val MessageChannel.isPrivateChannel
@@ -48,10 +44,6 @@ val GuildChannel.position
 
 val GuildChannel.positionRaw
     get() = (this as? IPositionableChannel)?.positionRaw
-
-
-val AudioChannel.userLimit
-    get() = (this as? VoiceChannel)?.userLimit
 
 
 fun Channel.hasAccessByMember(member: Member? = null) =

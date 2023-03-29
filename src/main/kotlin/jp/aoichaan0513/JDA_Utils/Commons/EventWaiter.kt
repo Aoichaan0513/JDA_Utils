@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.events.session.ShutdownEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.sharding.ShardManager
 import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
@@ -15,10 +16,8 @@ abstract class EventWaiter(
     var timeOutAction: Runnable = Runnable { }
 ) : ListenerAdapter() {
 
-    val scheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
+    val scheduledExecutorService: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     var scheduledFuture: ScheduledFuture<*>? = null
-
-    private val instance = this
 
     var isAddedEventListener = false
         private set
@@ -32,20 +31,20 @@ abstract class EventWaiter(
         if (scheduledExecutorService.isShutdown || timeOut < 1) return
 
         if (!isAddedEventListener) {
-            shardManager.addEventListener(instance)
+            shardManager.addEventListener(this)
             isAddedEventListener = true
         }
 
         scheduledFuture?.cancel(true)
         scheduledFuture = scheduledExecutorService.schedule({
-            shardManager.removeEventListener(instance)
+            shardManager.removeEventListener(this)
             timeOutAction.run()
         }, timeOut, timeUnit)
     }
 
     open fun stop() {
         if (isAddedEventListener) {
-            shardManager.removeEventListener(instance)
+            shardManager.removeEventListener(this)
             isAddedEventListener = false
         }
 
@@ -54,7 +53,7 @@ abstract class EventWaiter(
 
     open fun stopNow() {
         if (isAddedEventListener) {
-            shardManager.removeEventListener(instance)
+            shardManager.removeEventListener(this)
             isAddedEventListener = false
         }
 

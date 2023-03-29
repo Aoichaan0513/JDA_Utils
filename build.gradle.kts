@@ -23,11 +23,11 @@ dependencies {
     implementation(kotlin("script-util", kotlinVersion))
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4")
 
-    implementation("net.dv8tion", "JDA", "5.0.0-beta.4")
+    implementation("net.dv8tion", "JDA", "5.0.0-beta.6")
     implementation("club.minnced", "discord-webhooks", "0.8.2")
     implementation("joda-time", "joda-time", "2.12.2")
     implementation("org.ocpsoft.prettytime", "prettytime", "5.0.6.Final")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.6.0")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.6.1")
 }
 
 java {

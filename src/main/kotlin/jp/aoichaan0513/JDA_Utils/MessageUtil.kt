@@ -49,8 +49,8 @@ fun MessageEmbed.toText() = buildString {
     insertText(author?.name) { "${it.quote()}\n" }
     insertText(title) { "${it.bold().quote()}\n" }
     insertText(description) { "$it\n" }
-    fields.filter { !it.name.isNullOrEmpty() || !it.value.isNullOrEmpty() }.forEach {
-        insertText("${it.name?.let { "${it.bold()} ― " }}${it.value}") { "$it\n" }
+    fields.filter { !it.name.isNullOrEmpty() || !it.value.isNullOrEmpty() }.forEach { field ->
+        insertText("${field.name?.let { "${it.bold()} ― " }}${field.value}") { "$it\n" }
     }
     insertText(footer?.text) { it.quote() }
 }.trim()

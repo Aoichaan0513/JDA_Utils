@@ -1,5 +1,6 @@
 package jp.aoichaan0513.JDA_Utils.Commons
 
+import jp.aoichaan0513.JDA_Utils.StringUtil
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
@@ -76,7 +77,7 @@ fun buildEmbed(embed: MessageEmbed, builder: EmbedBuilder.() -> Unit) = EmbedBui
 class EmbedBuilder {
 
     companion object {
-        val ZERO_WIDTH_SPACE = net.dv8tion.jda.api.EmbedBuilder.ZERO_WIDTH_SPACE
+        const val ZERO_WIDTH_SPACE = StringUtil.ZERO_WIDTH_SPACE.toString()
         var DEFAULT_COLOR = 0x1FFFFFFF
     }
 
@@ -95,7 +96,6 @@ class EmbedBuilder {
      * Set color.
      *
      * @param color [Color] (Nullable)
-     * @param builder Builder object
      *
      * @author Aoichaan0513
      */
@@ -229,29 +229,30 @@ class EmbedBuilder {
      */
     @DslContext
     fun timestamp(temporal: TemporalAccessor?) {
-        timestamp = if (temporal == null) {
-            null
-        } else if (temporal is OffsetDateTime) {
-            temporal
-        } else {
-            val offset = try {
-                ZoneOffset.from(temporal)
-            } catch (ignore: DateTimeException) {
-                ZoneOffset.UTC
-            }
+        timestamp = when (temporal) {
+            null -> null
+            is OffsetDateTime -> temporal
 
-            try {
-                val localDateTime = LocalDateTime.from(temporal)
-                OffsetDateTime.of(localDateTime, offset)
-            } catch (ignore: DateTimeException) {
+            else -> {
+                val offset = try {
+                    ZoneOffset.from(temporal)
+                } catch (ignore: DateTimeException) {
+                    ZoneOffset.UTC
+                }
+
                 try {
-                    val instant = Instant.from(temporal)
-                    OffsetDateTime.ofInstant(instant, offset)
-                } catch (err: DateTimeException) {
-                    throw DateTimeException(
-                        "Unable to obtain OffsetDateTime from TemporalAccessor: $temporal of type ${temporal.javaClass.name}",
-                        err
-                    )
+                    val localDateTime = LocalDateTime.from(temporal)
+                    OffsetDateTime.of(localDateTime, offset)
+                } catch (ignore: DateTimeException) {
+                    try {
+                        val instant = Instant.from(temporal)
+                        OffsetDateTime.ofInstant(instant, offset)
+                    } catch (err: DateTimeException) {
+                        throw DateTimeException(
+                            "Unable to obtain OffsetDateTime from TemporalAccessor: $temporal of type ${temporal.javaClass.name}",
+                            err
+                        )
+                    }
                 }
             }
         }

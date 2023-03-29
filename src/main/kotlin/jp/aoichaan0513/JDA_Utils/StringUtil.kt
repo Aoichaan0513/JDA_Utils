@@ -2,6 +2,10 @@ package jp.aoichaan0513.JDA_Utils
 
 import net.dv8tion.jda.api.utils.MarkdownUtil
 
+object StringUtil {
+    const val ZERO_WIDTH_SPACE = '\u200E'
+}
+
 fun String.bold() = MarkdownUtil.bold(this)
 fun String.italic() = MarkdownUtil.italics(this)
 fun String.underline() = MarkdownUtil.underline(this)
