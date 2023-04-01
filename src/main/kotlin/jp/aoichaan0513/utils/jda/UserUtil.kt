@@ -1,4 +1,4 @@
-package jp.aoichaan0513.JDA_Utils
+package jp.aoichaan0513.utils.jda
 
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.ClientType

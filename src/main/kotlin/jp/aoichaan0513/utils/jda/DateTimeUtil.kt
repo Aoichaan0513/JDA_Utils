@@ -1,6 +1,6 @@
-package jp.aoichaan0513.JDA_Utils
+package jp.aoichaan0513.utils.jda
 
-import jp.aoichaan0513.Kotlin_Utils.getFormattedDateTime
+import jp.aoichaan0513.utils.kotlin.getFormattedDateTime
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.ocpsoft.prettytime.PrettyTime
@@ -84,6 +84,6 @@ fun ZonedDateTime.getFormattedTimestamp(
 
 object DateTimeUtil {
 
-    val DEFAULT_ZONE_ID: ZoneId = jp.aoichaan0513.Kotlin_Utils.DateTimeUtil.DEFAULT_ZONE_ID
-    var DEFAULT_PATTERN = jp.aoichaan0513.Kotlin_Utils.DateTimeUtil.DEFAULT_PATTERN
+    val DEFAULT_ZONE_ID: ZoneId = jp.aoichaan0513.utils.kotlin.DateTimeUtil.DEFAULT_ZONE_ID
+    var DEFAULT_PATTERN = jp.aoichaan0513.utils.kotlin.DateTimeUtil.DEFAULT_PATTERN
 }

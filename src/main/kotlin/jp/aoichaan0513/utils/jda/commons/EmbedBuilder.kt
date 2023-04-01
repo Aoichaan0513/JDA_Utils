@@ -1,6 +1,6 @@
-package jp.aoichaan0513.JDA_Utils.Commons
+package jp.aoichaan0513.utils.jda.commons
 
-import jp.aoichaan0513.JDA_Utils.StringUtil
+import jp.aoichaan0513.utils.jda.StringUtil
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User

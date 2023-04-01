@@ -1,6 +1,6 @@
-package jp.aoichaan0513.JDA_Utils
+package jp.aoichaan0513.utils.jda
 
-import jp.aoichaan0513.JDA_Utils.Commons.ComponentEventListener
+import jp.aoichaan0513.utils.jda.commons.ComponentEventListener
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay

@@ -1,9 +1,9 @@
-package jp.aoichaan0513.JDA_Utils
+package jp.aoichaan0513.utils.jda
 
 import club.minnced.discord.webhook.send.AllowedMentions
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder
 import club.minnced.discord.webhook.send.WebhookMessageBuilder
-import jp.aoichaan0513.JDA_Utils.Commons.MessageBuilder
+import jp.aoichaan0513.utils.jda.commons.MessageBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed

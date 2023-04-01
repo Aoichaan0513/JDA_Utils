@@ -1,6 +1,6 @@
-package jp.aoichaan0513.JDA_Utils
+package jp.aoichaan0513.utils.jda
 
-import jp.aoichaan0513.JDA_Utils.Commons.ComponentEventListener
+import jp.aoichaan0513.utils.jda.commons.ComponentEventListener
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.sharding.ShardManager

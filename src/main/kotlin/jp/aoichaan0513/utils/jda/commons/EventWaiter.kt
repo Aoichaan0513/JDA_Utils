@@ -1,23 +1,20 @@
-package jp.aoichaan0513.JDA_Utils.Commons
+package jp.aoichaan0513.utils.jda.commons
 
-import net.dv8tion.jda.api.events.GenericEvent
-import net.dv8tion.jda.api.events.message.GenericMessageEvent
-import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.events.session.ShutdownEvent
-import net.dv8tion.jda.api.hooks.EventListener
+import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.sharding.ShardManager
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
-abstract class InputAPI(
+abstract class EventWaiter(
     val shardManager: ShardManager,
     val isStart: Boolean = true,
     val timeOut: Long = 3,
     val timeUnit: TimeUnit = TimeUnit.MINUTES,
     var timeOutAction: Runnable = Runnable { }
-) : EventListener {
+) : ListenerAdapter() {
 
     val scheduledExecutorService: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
     var scheduledFuture: ScheduledFuture<*>? = null
@@ -63,14 +60,7 @@ abstract class InputAPI(
         scheduledExecutorService.shutdownNow()
     }
 
-    abstract fun onMessageEvent(e: GenericMessageEvent)
-    abstract fun onMessageReactionEvent(e: GenericMessageReactionEvent)
-
-    override fun onEvent(e: GenericEvent) {
-        when (e) {
-            is GenericMessageReactionEvent -> onMessageReactionEvent(e)
-            is GenericMessageEvent -> onMessageEvent(e)
-            is ShutdownEvent -> stop()
-        }
+    override fun onShutdown(e: ShutdownEvent) {
+        stop()
     }
 }
