@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val kotlinVersion: String by extra("1.8.10")
+val kotlinVersion = "1.9.10"
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.9.10"
     maven
 }
 
@@ -20,15 +20,14 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib", kotlinVersion))
-    implementation(kotlin("script-util", kotlinVersion))
-    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4")
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.7.3")
 
-    implementation("net.dv8tion", "JDA", "5.0.0-beta.6")
-    implementation("club.minnced", "discord-webhooks", "0.8.2")
-    implementation("joda-time", "joda-time", "2.12.2")
-    implementation("org.ocpsoft.prettytime", "prettytime", "5.0.6.Final")
-    implementation("org.json", "json", "20220320")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.6.3")
+    implementation("net.dv8tion", "JDA", "5.0.0-beta.15")
+    implementation("club.minnced", "discord-webhooks", "0.8.4")
+    implementation("joda-time", "joda-time", "2.12.5")
+    implementation("org.ocpsoft.prettytime", "prettytime", "5.0.7.Final")
+    implementation("org.json", "json", "20230618")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.7.0")
 }
 
 java {
