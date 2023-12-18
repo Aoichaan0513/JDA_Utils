@@ -22,12 +22,12 @@ dependencies {
     implementation(kotlin("stdlib", kotlinVersion))
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.7.3")
 
-    implementation("net.dv8tion", "JDA", "5.0.0-beta.15")
+    implementation("net.dv8tion", "JDA", "5.0.0-beta.18")
     implementation("club.minnced", "discord-webhooks", "0.8.4")
     implementation("joda-time", "joda-time", "2.12.5")
     implementation("org.ocpsoft.prettytime", "prettytime", "5.0.7.Final")
-    implementation("org.json", "json", "20230618")
-    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.7.0")
+    implementation("org.json", "json", "20231013")
+    implementation("jp.aoichaan0513", "Kotlin_Utils", "1.7.1")
 }
 
 java {
