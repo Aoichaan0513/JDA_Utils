@@ -1,6 +1,6 @@
-package jp.aoichaan0513.utils.jda
+package com.github.aoichaan0513.utils.jda
 
-import jp.aoichaan0513.utils.jda.commons.ComponentEventListener
+import com.github.aoichaan0513.utils.jda.commons.ComponentEventListener
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent

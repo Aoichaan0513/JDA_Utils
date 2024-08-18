@@ -8,12 +8,12 @@
 
 ```gradle
 repositories {
-    maven { url 'https://raw.githubusercontent.com/Aoichaan0513/repository/main' }
+    maven { url 'https://jitpack.io/' }
 }
 
 dependencies {
-    // implementation 'jp.aoichaan0513:JDA_Utils:2.0.0-beta.30'
-    implementation group: 'jp.aoichaan0513', name: 'JDA_Utils', version: '2.0.0-beta.30'
+    // implementation 'com.github.aoichaan0513:JDA_Utils:5.0.2_1'
+    implementation group: 'com.github.aoichaan0513', name: 'JDA_Utils', version: '5.0.2_1'
 }
 ```
 
@@ -21,12 +21,12 @@ dependencies {
 
 ```gradle
 repositories {
-    maven("https://raw.githubusercontent.com/Aoichaan0513/repository/main")
+    maven("https://jitpack.io/")
 }
 
 dependencies {
-    // implementation("jp.aoichaan0513:JDA_Utils:2.0.0-beta.30")
-    implementation("jp.aoichaan0513", "JDA_Utils", "2.0.0-beta.30")
+    // implementation("com.github.aoichaan0513:JDA_Utils:5.0.2_1")
+    implementation("com.github.aoichaan0513", "JDA_Utils", "5.0.2_1")
 }
 ```
 

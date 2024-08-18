@@ -1,4 +1,4 @@
-package jp.aoichaan0513.utils.jda
+package com.github.aoichaan0513.utils.jda
 
 import club.minnced.discord.webhook.WebhookClientBuilder
 import club.minnced.discord.webhook.receive.ReadonlyMessage

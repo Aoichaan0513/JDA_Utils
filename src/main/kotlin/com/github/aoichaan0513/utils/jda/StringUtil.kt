@@ -1,4 +1,4 @@
-package jp.aoichaan0513.utils.jda
+package com.github.aoichaan0513.utils.jda
 
 import net.dv8tion.jda.api.utils.MarkdownUtil
 
