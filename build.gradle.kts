@@ -10,7 +10,6 @@ version = "5.0.2_1"
 
 repositories {
     mavenCentral()
-    jcenter()
 
     maven("https://jitpack.io/")
 }
