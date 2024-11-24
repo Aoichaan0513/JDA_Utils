@@ -12,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    // implementation 'com.github.aoichaan0513:JDA_Utils:5.1.0_1'
-    implementation group: 'com.github.aoichaan0513', name: 'JDA_Utils', version: '5.1.0_1'
+    // implementation 'com.github.aoichaan0513:JDA_Utils:5.2.1_1'
+    implementation group: 'com.github.aoichaan0513', name: 'JDA_Utils', version: '5.2.1_1'
 }
 ```
 
@@ -25,8 +25,8 @@ repositories {
 }
 
 dependencies {
-    // implementation("com.github.aoichaan0513:JDA_Utils:5.1.0_1")
-    implementation("com.github.aoichaan0513", "JDA_Utils", "5.1.0_1")
+    // implementation("com.github.aoichaan0513:JDA_Utils:5.2.1_1")
+    implementation("com.github.aoichaan0513", "JDA_Utils", "5.2.1_1")
 }
 ```
 
