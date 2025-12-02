@@ -3,7 +3,7 @@ package com.github.aoichaan0513.utils.jda.commons
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.Message.MentionType
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.interactions.components.LayoutComponent
+import net.dv8tion.jda.api.components.MessageTopLevelComponent
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import net.dv8tion.jda.api.utils.messages.MessageEditBuilder
 
@@ -39,7 +39,7 @@ fun buildMessage(message: Message, builder: MessageBuilder.() -> Unit) = Message
     tts = message.isTTS
     content = message.contentRaw
     embeds = message.embeds
-    components = message.actionRows.toMutableList()
+    components = message.components.toMutableList()
 }.apply(builder)
 
 @DslContext
@@ -50,7 +50,7 @@ class MessageBuilder {
     var tts = false
     var content: String? = null
     var embeds = mutableListOf<MessageEmbed>()
-    var components = mutableListOf<LayoutComponent>()
+    var components = mutableListOf<MessageTopLevelComponent>()
 
     /**
      * Add embed.
@@ -110,7 +110,7 @@ class MessageBuilder {
      * @author Aoichaan0513
      */
     @DslContext
-    fun addComponent(component: LayoutComponent) {
+    fun addComponent(component: MessageTopLevelComponent) {
         components.add(component)
     }
 
@@ -123,7 +123,7 @@ class MessageBuilder {
      * @author Aoichaan0513
      */
     @DslContext
-    fun addComponent(index: Int, component: LayoutComponent) {
+    fun addComponent(index: Int, component: MessageTopLevelComponent) {
         components.add(index, component)
     }
 

@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.2.21"
     id("maven-publish")
 }
 
@@ -17,7 +15,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.9.0")
 
-    implementation("net.dv8tion", "JDA", "5.2.1")
+    implementation("net.dv8tion", "JDA", "6.1.2")
     implementation("club.minnced", "discord-webhooks", "0.8.4")
     implementation("joda-time", "joda-time", "2.13.0")
     implementation("org.ocpsoft.prettytime", "prettytime", "5.0.9.Final")
@@ -30,9 +28,12 @@ java {
     withJavadocJar()
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
-compileKotlin.kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+kotlin {
+    jvmToolchain(11)
+    compilerOptions {
+        optIn.add("kotlin.RequiresOptIn")
+    }
+}
 
 val sourcesJar: Jar by tasks
 val javadocJar: Jar by tasks
