@@ -15,7 +15,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.9.0")
 
-    implementation("net.dv8tion", "JDA", "6.1.2")
+    implementation("net.dv8tion", "JDA", "6.4.1")
     implementation("club.minnced", "discord-webhooks", "0.8.4")
     implementation("joda-time", "joda-time", "2.13.0")
     implementation("org.ocpsoft.prettytime", "prettytime", "5.0.9.Final")
